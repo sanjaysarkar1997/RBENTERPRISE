@@ -1,5 +1,5 @@
 const apis = {
-  baseUrl: "https://rbenterprise.herokuapp.com//api/v1/",
+  baseUrl: "https://rbenterprise.herokuapp.com/api/v1/",
   ADD_ITEM: "create-product",
   GET_ITEMS: "get-products",
   CREATE_BILL: "create-bill",
