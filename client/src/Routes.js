@@ -21,7 +21,7 @@ export default function Routes() {
         <Switch>
           <Route path="/login">
             {localStorage.getItem("logged") ? (
-              <Redirect to="//view-bills" />
+              <Redirect to="/view-bills" />
             ) : (
               <Login />
             )}

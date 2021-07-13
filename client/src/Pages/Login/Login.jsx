@@ -1,11 +1,19 @@
 import React from "react";
-import { Form, Input, Button, Row, Col } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { connect } from "react-redux";
 import "./Login.less";
+import { useHistory } from "react-router-dom";
 
 const Login = (props) => {
+  const history = useHistory();
   const onFinish = (values) => {
     console.log("Success:", values);
+    if (values.username === "bardhanrupam5" && values.password === "12345") {
+      localStorage.setItem("logged", true);
+      history.push("/");
+    } else {
+      message.error("Wrong UserName or Password");
+    }
   };
 
   const onFinishFailed = (errorInfo) => {

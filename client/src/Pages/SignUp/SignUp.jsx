@@ -1,11 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import "./SignUp.less";
 
 export const SignUp = (props) => {
   return (
-    <div>
-      <h1>Sign Up</h1>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <Link to="/login">Go to login</Link>
     </div>
   );
 };
