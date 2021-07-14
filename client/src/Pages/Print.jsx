@@ -22,14 +22,20 @@ export default function Print() {
     }
     return total;
   };
-  
+
   return (
     <div>
       <div class="container-fluid">
         <div class="card">
-          <div class="card-header">
-            Invoice:&emsp;
-            <strong>{printDetails.dateOfBilling}</strong>
+          <div
+            class="card-header"
+            style={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <div>
+              Bill No:&emsp;
+              <strong>{printDetails?._id}</strong>
+            </div>
+            <div>Date: {printDetails?.dateOfBilling}</div>
           </div>
           <div class="card-body">
             <div class="row mb-4">
@@ -60,7 +66,7 @@ export default function Print() {
                   <tr>
                     <th class="center">#</th>
                     <th>Particular</th>
-                    <th>Description</th>
+                    {/* <th>Description</th> */}
 
                     <th class="right">MRP</th>
                     <th class="center">Qty</th>
@@ -73,7 +79,7 @@ export default function Print() {
                     <tr>
                       <td class="center">{i + 1}</td>
                       <td class="left strong">{ele.particular}</td>
-                      <td class="left">{"NA"}</td>
+                      {/* <td class="left">{"NA"}</td> */}
 
                       <td class="right">₹ {ele.mrp}</td>
                       <td class="center">{ele.quantity}</td>
