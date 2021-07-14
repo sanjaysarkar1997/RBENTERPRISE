@@ -146,7 +146,7 @@ export const CreateBill = (props) => {
         <DatePicker
           format={"DD/MM/YYYY"}
           onChange={(e) => setDateOfBilling(e)}
-          defaultValue={moment()}
+//           defaultValue={moment()}
         />
       </div>
       <br />
