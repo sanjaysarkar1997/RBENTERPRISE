@@ -99,7 +99,7 @@ export default function Print() {
                         <td class="center">{ele.quantity}</td>
                         <td class="right">₹ {ele.rate}</td>
                         <td class="right">
-                          ₹ {Number(ele.rate) * Number(ele.quantity)}
+                          ₹ {Number((Number(ele.rate) * Number(ele.quantity)).toFixed(3))}
                         </td>
                       </tr>
                     ))}
