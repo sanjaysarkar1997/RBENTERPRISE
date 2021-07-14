@@ -105,7 +105,7 @@ export const CreateBill = (props) => {
       console.log(dataSource[i].total);
       total = total + dataSource[i].total;
     }
-    return total;
+    return Number(total).toFixed(2);
   };
 
   const createBill = () => {
