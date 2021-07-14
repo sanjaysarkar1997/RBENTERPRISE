@@ -13,6 +13,7 @@ import Modal from "antd/lib/modal/Modal";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 export const CreateBill = (props) => {
   const { Option } = Select;
@@ -108,7 +109,13 @@ export const CreateBill = (props) => {
     data.Address = address;
     data.products = dataSource;
     if (Object.keys(data).length > 2) {
-      http.post(apis.CREATE_BILL, data).then((res) => console.log(res));
+      http.post(apis.CREATE_BILL, data).then((res) => {
+        if (res.data.error) {
+          console.log(res);
+        } else {
+          Swal.fire("Success", "Bill Created Successfully", "success");
+        }
+      });
       console.log(data);
     } else {
       console.log("Error");

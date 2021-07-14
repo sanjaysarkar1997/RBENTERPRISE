@@ -1,11 +1,18 @@
 import { Form, Input, Button, Typography } from "antd";
+import Swal from "sweetalert2";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 
 const AddItem = () => {
   const onFinish = (values) => {
     console.log("Success:", values);
-    http.post(apis.ADD_ITEM, values).then((res) => console.log(res));
+    http.post(apis.ADD_ITEM, values).then((res) => {
+      if (res.data.error) {
+        console.log(res);
+      } else {
+        Swal.fire("Success", "Item Addded", "success");
+      }
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
