@@ -48,7 +48,9 @@ export default function Print() {
                 <div>FALAKATA, Alipurduar</div>
                 <div>Email: bardhanrupam5@gmail.com</div>
                 <div>Phone: 8101397644</div>
-                <div>GST NO: 19AIAPB3656R1ZV</div>
+                <div>
+                  GST NO: <b>19AIAPB3656R1ZV</b>
+                </div>
               </div>
 
               <div class="col-sm-6">
