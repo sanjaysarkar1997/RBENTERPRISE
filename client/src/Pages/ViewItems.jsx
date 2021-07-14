@@ -5,44 +5,39 @@ import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
 
-const ViewBills = (props) => {
+export const ViewBills = (props) => {
   const [data, setData] = useState([]);
 
   const columns = [
     {
-      title: "Customer Name",
-      dataIndex: "customerName",
-      key: "name",
+      title: "Product Code",
+      dataIndex: "productCode",
+      key: "productCode",
     },
     {
-      title: "Date",
-      dataIndex: "dateOfBilling",
-      key: "date",
+      title: "Product Name",
+      dataIndex: "productName",
+      key: "productName",
     },
     {
-      title: "Address",
-      dataIndex: "Address",
-      key: "address",
+      title: "MRP",
+      dataIndex: "MRP",
+      key: "productName",
     },
     {
-      title: "View",
-      dataIndex: "_id",
-      render: (record, test) => (
-        <a href={`/print/${record}`} target="_blank">
-          View
-        </a>
-      ),
-      key: "rate",
+      title: "Sale Price",
+      dataIndex: "salePrice",
+      key: "salePrice",
     },
   ];
 
   useEffect(() => {
     props.loading(true);
     http
-      .get(apis.VIEW_BILLS)
+      .get(apis.GET_ITEMS)
       .then((res) => {
         if (!res.data.error) {
-          setData(res.data.results.bill);
+          setData(res.data.results.product);
         }
       })
       .finally(() => props.loading(false));
@@ -51,9 +46,9 @@ const ViewBills = (props) => {
   return (
     <div>
       <Typography.Title style={{ textAlign: "center" }} level={1}>
-        View Bills
+        View Items
       </Typography.Title>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} size="middle" />
     </div>
   );
 };

@@ -14,6 +14,8 @@ import http from "../apis/instance";
 import apis from "../apis/urls";
 import moment from "moment";
 import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
+import { loading } from "../Redux/action/loading";
 
 export const CreateBill = (props) => {
   const { Option } = Select;
@@ -25,6 +27,8 @@ export const CreateBill = (props) => {
   const [name, setName] = useState("");
   const [dateOfBilling, setDateOfBilling] = useState("");
   const [address, setAddress] = useState("");
+
+  const history = useHistory();
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -85,12 +89,14 @@ export const CreateBill = (props) => {
       mrp: product.MRP,
       quantity: quantity,
       rate: product.salePrice,
-      total: Number(product.salePrice) * Number(quantity),
+      total: Number((Number(product.salePrice) * Number(quantity)).toFixed(3)),
     };
 
     data.push(obj);
     setDataSource(data);
     setIsModalVisible(false);
+    setProduct({});
+    setQuantity(0);
   };
 
   const getTotal = () => {
@@ -103,19 +109,25 @@ export const CreateBill = (props) => {
   };
 
   const createBill = () => {
+    props.loading(true);
     let data = {};
     data.customerName = name;
     data.dateOfBilling = moment(dateOfBilling).format("DD/MM/YYYY");
     data.Address = address;
     data.products = dataSource;
-    if (Object.keys(data).length > 2) {
-      http.post(apis.CREATE_BILL, data).then((res) => {
-        if (res.data.error) {
-          console.log(res);
-        } else {
-          Swal.fire("Success", "Bill Created Successfully", "success");
-        }
-      });
+    if (data.customerName) {
+      http
+        .post(apis.CREATE_BILL, data)
+        .then((res) => {
+          if (res.data.error) {
+            console.log(res);
+          } else {
+            Swal.fire("Success", "Bill Created Successfully", "success").then(
+              () => history.push("/view-bills")
+            );
+          }
+        })
+        .finally(() => props.loading(false));
       console.log(data);
     } else {
       console.log("Error");
@@ -134,6 +146,7 @@ export const CreateBill = (props) => {
         <DatePicker
           format={"DD/MM/YYYY"}
           onChange={(e) => setDateOfBilling(e)}
+          defaultValue={moment()}
         />
       </div>
       <br />
@@ -215,7 +228,11 @@ export const CreateBill = (props) => {
           <h3 style={{ margin: "0 5px" }}>{product?.MRP}</h3>
           <h3 style={{ margin: "0 5px" }}>{product?.salePrice}</h3>
           <h3 style={{ margin: "0 5px" }}>
-            {Number(product?.salePrice) * Number(quantity)}
+            {Number((Number(product.salePrice) * Number(quantity)).toFixed(3))
+              ? Number(
+                  (Number(product.salePrice) * Number(quantity)).toFixed(3)
+                )
+              : ""}
           </h3>
         </div>
       </Modal>
@@ -225,6 +242,6 @@ export const CreateBill = (props) => {
 
 const mapStateToProps = (state) => ({});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { loading };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateBill);

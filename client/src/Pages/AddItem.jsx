@@ -1,18 +1,28 @@
 import { Form, Input, Button, Typography } from "antd";
+import { connect } from "react-redux";
 import Swal from "sweetalert2";
 import http from "../apis/instance";
 import apis from "../apis/urls";
+import { loading } from "../Redux/action/loading";
 
-const AddItem = () => {
+const AddItem = (props) => {
+  const [form] = Form.useForm();
+
   const onFinish = (values) => {
     console.log("Success:", values);
-    http.post(apis.ADD_ITEM, values).then((res) => {
-      if (res.data.error) {
-        console.log(res);
-      } else {
-        Swal.fire("Success", "Item Addded", "success");
-      }
-    });
+    props.loading(true);
+    http
+      .post(apis.ADD_ITEM, values)
+      .then((res) => {
+        if (res.data.error) {
+          console.log(res);
+        } else {
+          Swal.fire("Success", "Item Addded", "success").then(() =>
+            form.resetFields()
+          );
+        }
+      })
+      .finally(() => props.loading(false));
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -33,6 +43,7 @@ const AddItem = () => {
       }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      form={form}
     >
       <Typography.Title style={{ textAlign: "center" }} level={1}>
         Add Item
@@ -103,4 +114,10 @@ const AddItem = () => {
   );
 };
 
-export default AddItem;
+const mapStateToProps = (state) => ({});
+
+const mapDispatchToProps = {
+  loading,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddItem);

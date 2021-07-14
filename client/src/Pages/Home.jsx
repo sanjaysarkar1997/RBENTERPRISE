@@ -28,7 +28,17 @@ function Home(props) {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo" />
+        <div
+          className="logo"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "#fff",
+          }}
+        >
+          {!collapsed ? " R B ENTERPRISE" : "RB"}
+        </div>
         <Menu theme="dark" mode="inline" selectedKeys={key}>
           <Menu.Item
             key="/add-new-item"
@@ -36,6 +46,13 @@ function Home(props) {
             onClick={() => setKey("/add-new-item")}
           >
             <Link to="/add-new-item">Add Item</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="/view-items"
+            icon={<UserOutlined />}
+            onClick={() => setKey("/view-items")}
+          >
+            <Link to="/view-items">View Items</Link>
           </Menu.Item>
           <Menu.Item
             key="/create-bill"
