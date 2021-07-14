@@ -21,7 +21,7 @@ export default function Print() {
     for (let i = 0; i < printDetails?.products?.length; i++) {
       total = total + printDetails?.products[i].total;
     }
-    return total;
+    return Number(total).toFixed(2);
   };
 
   let data = ["0", "1"];
