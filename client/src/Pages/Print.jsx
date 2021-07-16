@@ -110,8 +110,9 @@ export default function Print() {
                 </tbody>
               </table>
             </div>
-            <div class="row">
-              <div class="col-lg-4 col-sm-5 ml-auto">
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div></div>
+              <div>
                 <table class="table table-clear">
                   <tbody>
                     <tr>
