@@ -105,7 +105,7 @@ export const CreateBill = (props) => {
       console.log(dataSource[i].total);
       total = total + dataSource[i].total;
     }
-    return total;
+    return Number(total).toFixed(2);
   };
 
   const createBill = () => {
@@ -146,7 +146,7 @@ export const CreateBill = (props) => {
         <DatePicker
           format={"DD/MM/YYYY"}
           onChange={(e) => setDateOfBilling(e)}
-          defaultValue={moment()}
+//           defaultValue={moment()}
         />
       </div>
       <br />

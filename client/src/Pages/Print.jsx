@@ -21,7 +21,7 @@ export default function Print() {
     for (let i = 0; i < printDetails?.products?.length; i++) {
       total = total + printDetails?.products[i].total;
     }
-    return total;
+    return Number(total).toFixed(2);
   };
 
   let data = ["0"];
@@ -73,6 +73,7 @@ export default function Print() {
                 </div>
               </div>
             </div>
+            <br />
 
             <div class="table-responsive-sm">
               <table class="table table-striped">
@@ -99,7 +100,10 @@ export default function Print() {
                       <td class="center">{ele.quantity}</td>
                       <td class="right">₹ {ele.rate}</td>
                       <td class="right">
-                        ₹ {Number(ele.rate) * Number(ele.quantity)}
+                        ₹{" "}
+                        {Number(
+                          (Number(ele.rate) * Number(ele.quantity)).toFixed(3)
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -124,10 +128,10 @@ export default function Print() {
             </div>
             <br />
             <br />
-            <br />
+
             <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div>
+              <div style={{ width: "200px" }}>
                 <table class="table table-clear">
                   <tbody>
                     <tr>
@@ -143,7 +147,7 @@ export default function Print() {
                 </p>
               </div>
 
-              <div>
+              <div style={{ width: "200px" }}>
                 <table class="table table-clear">
                   <tbody>
                     <tr>
