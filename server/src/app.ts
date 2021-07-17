@@ -10,7 +10,7 @@ import routes from "./router/auth.routes";
 import { success } from "./services/responseModifier";
 import connectMongoDB from "./db/MongoDB";
 import { infoLog } from "./services/logServices";
-import cronRunner from "./services/cronService";
+// import cronRunner from "./services/cronService";
 
 require("dotenv").config();
 
@@ -26,7 +26,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // CronRunner
-cronRunner();
+// cronRunner();
+
+
 
 // Routes
 app.use("/api/v1", routes);

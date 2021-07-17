@@ -10,7 +10,6 @@ import Login from "./Pages/Login/Login";
 import Print from "./Pages/Print";
 
 const SignUp = lazy(() => import("./Pages/SignUp/SignUp"));
-
 const Restricted = lazy(() => import("./Pages/Login/Login"));
 const PageNotFound = lazy(() => import("./Pages/PageNotFound/PageNotFound"));
 
@@ -21,7 +20,7 @@ export default function Routes() {
         <Switch>
           <Route path="/login">
             {localStorage.getItem("logged") ? (
-              <Redirect to="/view-bills" />
+              <Redirect to="/view-items" />
             ) : (
               <Login />
             )}

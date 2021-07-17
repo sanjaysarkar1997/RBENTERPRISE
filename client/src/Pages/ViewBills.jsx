@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
+import moment from "moment";
 
 const ViewBills = (props) => {
   const [data, setData] = useState([]);
@@ -17,11 +18,16 @@ const ViewBills = (props) => {
     {
       title: "Date",
       dataIndex: "dateOfBilling",
+      render: (data) => (
+        <p style={{ marginBottom: "0px" }}>
+          {moment(data).format("DD/MM/YYYY")}
+        </p>
+      ),
       key: "date",
     },
     {
       title: "Address",
-      dataIndex: "Address",
+      dataIndex: "Address1",
       key: "address",
     },
     {
@@ -50,10 +56,10 @@ const ViewBills = (props) => {
 
   return (
     <div>
-      <Typography.Title style={{ textAlign: "center" }} level={1}>
+      <Typography.Title style={{ textAlign: "center" }} level={3}>
         View Bills
       </Typography.Title>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} size="small" />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   DatePicker,
   Table,
   InputNumber,
+  Divider,
 } from "antd";
 import { connect } from "react-redux";
 import Modal from "antd/lib/modal/Modal";
@@ -24,9 +25,9 @@ export const CreateBill = (props) => {
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [products, setProducts] = useState([]);
-  const [name, setName] = useState("");
-  const [dateOfBilling, setDateOfBilling] = useState("");
-  const [address, setAddress] = useState("");
+  const [dateOfBilling, setDateOfBilling] = useState(moment());
+  const [customers, setCustomers] = useState([]);
+  const [customer, setCustomer] = useState({});
 
   const history = useHistory();
 
@@ -43,9 +44,21 @@ export const CreateBill = (props) => {
   };
 
   useEffect(() => {
-    http
-      .get(apis.GET_ITEMS)
-      .then((res) => setProducts(res.data.results.product));
+    http.get(apis.GET_ITEMS).then((res) => {
+      if (res.data.error) {
+      } else {
+        setProducts(res.data.results.products);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    http.get(apis.GET_CUSTOMERS).then((res) => {
+      if (res.data.error) {
+      } else {
+        setCustomers(res.data.results.customers);
+      }
+    });
   }, []);
 
   const columns = [
@@ -81,6 +94,12 @@ export const CreateBill = (props) => {
     setProduct(product);
   }
 
+  function handleCustomer(value) {
+    let customer = customers.find((ele) => ele.customerName === value);
+    console.log(customer);
+    setCustomer(customer);
+  }
+
   const addProduct = () => {
     let data = dataSource;
 
@@ -90,6 +109,7 @@ export const CreateBill = (props) => {
       quantity: quantity,
       rate: product.salePrice,
       total: Number((Number(product.salePrice) * Number(quantity)).toFixed(3)),
+      productId: product._id,
     };
 
     data.push(obj);
@@ -110,12 +130,12 @@ export const CreateBill = (props) => {
 
   const createBill = () => {
     props.loading(true);
-    let data = {};
-    data.customerName = name;
-    data.dateOfBilling = moment(dateOfBilling).format("DD/MM/YYYY");
-    data.Address = address;
+
+    let data = customer;
+    data.dateOfBilling = dateOfBilling;
     data.products = dataSource;
-    if (data.customerName) {
+
+    if (Object.keys(data).length > 0) {
       http
         .post(apis.CREATE_BILL, data)
         .then((res) => {
@@ -136,28 +156,34 @@ export const CreateBill = (props) => {
 
   return (
     <>
-      <Typography.Title style={{ textAlign: "center" }} level={1}>
+      <Typography.Title style={{ textAlign: "center" }} level={3}>
         Create Bill
       </Typography.Title>
-
       <div style={{ display: "flex" }}>
-        <Input placeholder="Name" onChange={(e) => setName(e.target.value)} />
+        <Select
+          placeholder="Select Customer"
+          style={{ width: "100%" }}
+          onChange={handleCustomer}
+          showSearch
+        >
+          {customers.map((ele, i) => (
+            <Option value={ele?.customerName} key={i}>
+              {ele.customerName + " - " + ele.Address1}
+            </Option>
+          ))}
+        </Select>
         &emsp;
         <DatePicker
           format={"DD/MM/YYYY"}
           onChange={(e) => setDateOfBilling(e)}
-//           defaultValue={moment()}
+          defaultValue={moment()}
         />
       </div>
       <br />
-      <div>
-        <Input
-          placeholder="Address"
-          onChange={(e) => setAddress(e.target.value)}
-        />
-      </div>
-      <br />
-
+      <Divider style={{ margin: "10px 0px" }}></Divider>
+      <Typography.Title style={{ textAlign: "center" }} level={4}>
+        Products
+      </Typography.Title>
       {Object.keys(dataSource).length !== 0 && (
         <Table
           key={Object.keys(dataSource).length}
@@ -165,8 +191,8 @@ export const CreateBill = (props) => {
           columns={columns}
           footer={() => (
             <Typography.Title
-              level={4}
-              style={{ textAlign: "right", marginRight: "100px" }}
+              level={5}
+              style={{ textAlign: "right", marginRight: "50px" }}
             >
               Grand Total: {getTotal()}
             </Typography.Title>
@@ -198,7 +224,7 @@ export const CreateBill = (props) => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={600}
+        width={700}
         destroyOnClose
         footer={[
           <Button key="back" onClick={handleCancel}>
@@ -209,32 +235,69 @@ export const CreateBill = (props) => {
           </Button>,
         ]}
       >
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-          <Select
-            placeholder="Search Product"
-            style={{ width: 300 }}
-            onChange={handleChange}
-            showSearch
-          >
-            {products.map((ele, i) => (
-              <Option value={ele.productCode} key={i}>
-                {ele.productCode + " - " + ele.productName}
-              </Option>
-            ))}
-          </Select>
-          &emsp;
-          <InputNumber min={1} onChange={(e) => setQuantity(e)} />
-          &emsp;
-          <h3 style={{ margin: "0 5px" }}>{product?.MRP}</h3>
-          <h3 style={{ margin: "0 5px" }}>{product?.salePrice}</h3>
-          <h3 style={{ margin: "0 5px" }}>
-            {Number((Number(product.salePrice) * Number(quantity)).toFixed(3))
-              ? Number(
-                  (Number(product.salePrice) * Number(quantity)).toFixed(3)
-                )
-              : ""}
-          </h3>
-        </div>
+        {console.log(product)}
+        <table className="table">
+          <thead>
+            <tr>
+              <td>Select Product</td>
+              <td>Quantity</td>
+              <td>MRP</td>
+              <td>SP</td>
+              <td>Total</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {" "}
+                <Select
+                  placeholder="Search Product"
+                  style={{ width: 200 }}
+                  onChange={handleChange}
+                  showSearch
+                >
+                  {products.map((ele, i) => (
+                    <Option value={ele?.productCode} key={i}>
+                      {ele.productCode + " - " + ele.productName}
+                    </Option>
+                  ))}
+                </Select>
+              </td>
+
+              <td>
+                <InputNumber
+                  min={1}
+                  max={product.stock}
+                  onChange={(e) => setQuantity(e)}
+                />
+              </td>
+              <td>
+                <h3 style={{ margin: "0 5px" }}>
+                  {product?.MRP ? product.MRP : 0}
+                </h3>
+              </td>
+              <td>
+                <h3 style={{ margin: "0 5px" }}>
+                  {product?.salePrice ? product.salePrice : 0}
+                </h3>
+              </td>
+              <td>
+                <h3 style={{ margin: "0 5px" }}>
+                  {" "}
+                  {Number(
+                    (Number(product.salePrice) * Number(quantity)).toFixed(3)
+                  )
+                    ? Number(
+                        (Number(product.salePrice) * Number(quantity)).toFixed(
+                          3
+                        )
+                      )
+                    : 0}
+                </h3>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </Modal>
     </>
   );

@@ -1,28 +1,78 @@
-import { Form, Input, Button, Typography } from "antd";
+import { Form, Input, Button, Typography, InputNumber } from "antd";
+import { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
+import customId from "../services/customId";
 
 const AddItem = (props) => {
   const [form] = Form.useForm();
+  const [SKU, setSKU] = useState("");
+  const history = useHistory();
+
+  const { id } = useParams();
+
+  const getProduct = () => {
+    http.get(apis.GET_ITEM + "/" + id).then((res) => {
+      if (res.data.error) {
+      } else {
+        let product = res.data.results.product;
+        setSKU(product.SKU);
+
+        form.setFieldsValue({
+          productName: product.productName,
+          productCode: product.productCode,
+          MRP: product.MRP,
+          salePrice: product.salePrice,
+          stock: product.stock,
+          GST: product.GST,
+        });
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (id) {
+      getProduct();
+    }
+  }, [id]);
 
   const onFinish = (values) => {
-    console.log("Success:", values);
-    props.loading(true);
-    http
-      .post(apis.ADD_ITEM, values)
-      .then((res) => {
-        if (res.data.error) {
-          console.log(res);
-        } else {
-          Swal.fire("Success", "Item Addded", "success").then(() =>
-            form.resetFields()
-          );
-        }
-      })
-      .finally(() => props.loading(false));
+    // props.loading(true);
+    if (id) {
+      values.SKU = SKU;
+      values.id = id;
+      console.log(values);
+      http
+        .post(apis.UPDATE_ITEM, values)
+        .then((res) => {
+          if (res.data.error) {
+            console.log(res);
+          } else {
+            Swal.fire("Success", "Item Updated", "success").then(() =>
+              history.push("/view-items")
+            );
+          }
+        })
+        .finally(() => props.loading(false));
+    } else {
+      values.SKU = customId();
+      http
+        .post(apis.ADD_ITEM, values)
+        .then((res) => {
+          if (res.data.error) {
+            console.log(res);
+          } else {
+            Swal.fire("Success", "Item Addded", "success").then(() =>
+              form.resetFields()
+            );
+          }
+        })
+        .finally(() => props.loading(false));
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -33,10 +83,10 @@ const AddItem = (props) => {
     <Form
       name="basic"
       labelCol={{
-        span: 6,
+        span: 24,
       }}
       wrapperCol={{
-        span: 16,
+        span: 24,
       }}
       initialValues={{
         remember: true,
@@ -45,9 +95,10 @@ const AddItem = (props) => {
       onFinishFailed={onFinishFailed}
       form={form}
     >
-      <Typography.Title style={{ textAlign: "center" }} level={1}>
-        Add Item
+      <Typography.Title style={{ textAlign: "center" }} level={3}>
+        {id ? "Update " : "Add "}Item
       </Typography.Title>
+      <br />
       <Form.Item
         label="Product Name"
         name="productName"
@@ -80,7 +131,7 @@ const AddItem = (props) => {
         rules={[
           {
             required: true,
-            message: "Please input your password!",
+            message: "Please input your MRP!",
           },
         ]}
       >
@@ -93,7 +144,7 @@ const AddItem = (props) => {
         rules={[
           {
             required: true,
-            message: "Please input your password!",
+            message: "Please input your Sale Price!",
           },
         ]}
       >
@@ -101,13 +152,38 @@ const AddItem = (props) => {
       </Form.Item>
 
       <Form.Item
+        label="Stock"
+        name="stock"
+        rules={[
+          {
+            required: true,
+            message: "Please input your Stock!",
+          },
+        ]}
+      >
+        <InputNumber disabled={id} />
+      </Form.Item>
+      <Form.Item
+        label="Good & Service Tax"
+        name="GST"
+        rules={[
+          {
+            required: true,
+            message: "Please input your GST!",
+          },
+        ]}
+      >
+        <InputNumber />
+      </Form.Item>
+
+      <Form.Item
         wrapperCol={{
-          offset: 12,
+          offset: 11,
           span: 16,
         }}
       >
         <Button type="primary" htmlType="submit">
-          Add
+          {id ? "Update" : "Add"}
         </Button>
       </Form.Item>
     </Form>

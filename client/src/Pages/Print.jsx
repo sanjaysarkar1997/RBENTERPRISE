@@ -24,8 +24,6 @@ export default function Print() {
     return Number(total).toFixed(2);
   };
 
-  let data = ["0"];
-
   return (
     <div class="container-fluid">
       <div style={{ display: "flex" }}>
@@ -50,7 +48,6 @@ export default function Print() {
                 </div>
                 <div>Ashutosh Pally</div>
                 <div>FALAKATA, Alipurduar</div>
-                {/* <div>Email: bardhanrupam5@gmail.com</div> */}
                 <div>Phone: 8101397644</div>
                 <div>
                   GST NO: <b>19AIAPB3656R1ZV</b>
@@ -81,8 +78,6 @@ export default function Print() {
                   <tr>
                     <th class="center">#</th>
                     <th>Particular</th>
-                    {/* <th>Description</th> */}
-
                     <th class="right">MRP</th>
                     <th class="center">Qty</th>
                     <th>Rate</th>
@@ -92,14 +87,22 @@ export default function Print() {
                 <tbody>
                   {printDetails?.products?.map((ele, i) => (
                     <tr>
-                      <td class="center">{i + 1}</td>
-                      <td class="left strong">{ele.particular}</td>
-                      {/* <td class="left">{"NA"}</td> */}
-
-                      <td class="right">₹ {ele.mrp}</td>
-                      <td class="center">{ele.quantity}</td>
-                      <td class="right">₹ {ele.rate}</td>
-                      <td class="right">
+                      <td style={{ padding: "0px 3px" }} class="center">
+                        {i + 1}
+                      </td>
+                      <td style={{ padding: "0px 3px" }} class="left strong">
+                        {ele.particular}
+                      </td>
+                      <td style={{ padding: "0px 3px" }} class="right">
+                        ₹ {ele.mrp}
+                      </td>
+                      <td style={{ padding: "0px 3px" }} class="center">
+                        {ele.quantity}
+                      </td>
+                      <td style={{ padding: "0px 3px" }} class="right">
+                        ₹ {ele.rate}
+                      </td>
+                      <td style={{ padding: "0px 3px" }} class="right">
                         ₹{" "}
                         {Number(
                           (Number(ele.rate) * Number(ele.quantity)).toFixed(3)
@@ -137,9 +140,7 @@ export default function Print() {
                   <tbody>
                     <tr>
                       <td class="left">{/* <strong>Grand Total</strong> */}</td>
-                      <td class="right">
-                        {/* <strong>₹ {getTotal()}</strong> */}
-                      </td>
+                      <td class="right"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -153,9 +154,7 @@ export default function Print() {
                   <tbody>
                     <tr>
                       <td class="left">{/* <strong>Grand Total</strong> */}</td>
-                      <td class="right">
-                        {/* <strong>₹ {getTotal()}</strong> */}
-                      </td>
+                      <td class="right"></td>
                     </tr>
                   </tbody>
                 </table>

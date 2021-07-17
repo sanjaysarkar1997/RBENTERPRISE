@@ -10,7 +10,7 @@ const Login = (props) => {
     console.log("Success:", values);
     if (values.username === "bardhanrupam5" && values.password === "12345") {
       localStorage.setItem("logged", true);
-      history.push("/");
+      history.push("/view-bills");
     } else {
       message.error("Wrong UserName or Password");
     }

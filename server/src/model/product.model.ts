@@ -9,10 +9,19 @@ let product = new Schema({
   productCode: {
     type: String,
   },
+  SKU: {
+    type: String,
+  },
+  GST: {
+    type: Number,
+  },
   MRP: {
     type: Number,
   },
   salePrice: {
+    type: Number,
+  },
+  stock: {
     type: Number,
   },
 });

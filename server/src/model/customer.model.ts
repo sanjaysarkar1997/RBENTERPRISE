@@ -2,19 +2,19 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-let bill = new Schema({
+let customer = new Schema({
   customerName: {
     type: String,
   },
-  dateOfBilling: {
+  Address1: {
     type: String,
   },
-  Address: {
+  Address2: {
     type: String,
   },
-  products: {
-    type: Array,
+  mobileNumber: {
+    type: Number,
   },
 });
 
-export default mongoose.model("Bill", bill);
+export default mongoose.model("Customer", customer);

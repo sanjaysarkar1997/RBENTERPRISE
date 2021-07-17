@@ -4,9 +4,8 @@ import { Layout, Menu } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
+  PlusOutlined,
+  TableOutlined,
 } from "@ant-design/icons";
 import Routes from "./Routes";
 import { Link } from "react-router-dom";
@@ -37,40 +36,38 @@ function Home(props) {
             color: "#fff",
           }}
         >
-          {!collapsed ? " R B ENTERPRISE" : "RB"}
+          {!collapsed ? "R B ENTERPRISE" : "RB"}
         </div>
-        <Menu theme="dark" mode="inline" selectedKeys={key}>
-          <Menu.Item
-            key="/add-new-item"
-            icon={<UserOutlined />}
-            onClick={() => setKey("/add-new-item")}
-          >
+        <Menu
+          theme="dark"
+          mode="inline"
+          selectedKeys={key}
+          onClick={(e) => setKey(e.key)}
+        >
+          <Menu.Item key="/add-new-item" icon={<PlusOutlined />}>
             <Link to="/add-new-item">Add Item</Link>
           </Menu.Item>
-          <Menu.Item
-            key="/view-items"
-            icon={<UserOutlined />}
-            onClick={() => setKey("/view-items")}
-          >
+          <Menu.Item key="/view-items" icon={<TableOutlined />}>
             <Link to="/view-items">View Items</Link>
           </Menu.Item>
-          <Menu.Item
-            key="/create-bill"
-            active={key === "/create-bill"}
-            icon={<VideoCameraOutlined />}
-            onClick={() => setKey("/create-bill")}
-          >
+          <Menu.Item key="/add-stocks" icon={<PlusOutlined />}>
+            <Link to="/add-stocks">Add Stocks</Link>
+          </Menu.Item>
+          <Menu.Item key="/view-stocks" icon={<TableOutlined />}>
+            <Link to="/view-stocks">View Stocks</Link>
+          </Menu.Item>
+          <Menu.Item key="/create-bill" icon={<PlusOutlined />}>
             <Link to="/create-bill">Create Bill</Link>
           </Menu.Item>
-          <Menu.Item
-            key="/view-bills"
-            onClick={() => setKey("/view-bills")}
-            icon={<UploadOutlined />}
-          >
+          <Menu.Item key="/view-bills" icon={<TableOutlined />}>
             <Link to="/view-bills">View Bills</Link>
+          </Menu.Item>
+          <Menu.Item key="/create-customer" icon={<PlusOutlined />}>
+            <Link to="/create-customer">Create Customer</Link>
           </Menu.Item>
         </Menu>
       </Sider>
+
       <Layout className="site-layout">
         <Header
           className="site-layout-background"
@@ -83,7 +80,14 @@ function Home(props) {
               onClick: toggle,
             }
           )}
-          <h2 style={{ lineHeight: "64px", textAlign: "center" }}>
+          <h2
+            style={{
+              lineHeight: "64px",
+              textAlign: "center",
+              marginBottom: "0px",
+              fontSize: "22px",
+            }}
+          >
             RB Enterprise
           </h2>
         </Header>
@@ -92,7 +96,8 @@ function Home(props) {
           style={{
             margin: "24px 16px",
             padding: 24,
-            minHeight: 280,
+            height: 280,
+            overflow: "auto",
           }}
         >
           <Routes />
