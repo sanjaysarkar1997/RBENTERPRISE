@@ -47,7 +47,7 @@ const CreateCustomer = (props) => {
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         Create Customer
       </Typography.Title>
-      <br />
+
       <Form.Item
         label="Customer Name"
         name="customerName"

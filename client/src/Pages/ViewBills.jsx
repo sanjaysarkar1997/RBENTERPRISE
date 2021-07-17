@@ -55,12 +55,12 @@ const ViewBills = (props) => {
   }, []);
 
   return (
-    <div>
+    <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         View Bills
       </Typography.Title>
-      <Table columns={columns} dataSource={data} size="small" />
-    </div>
+      <Table columns={columns} dataSource={data} size="small" rowKey="_id" />
+    </>
   );
 };
 

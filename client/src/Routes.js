@@ -15,33 +15,31 @@ const PageNotFound = lazy(() => import("./Pages/PageNotFound/PageNotFound"));
 
 export default function Routes() {
   return (
-    <div>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/login">
-            {localStorage.getItem("logged") ? (
-              <Redirect to="/view-items" />
-            ) : (
-              <Login />
-            )}
-          </Route>
-          <PublicRoute
-            restricted={false}
-            component={LazyLoader(SignUp)}
-            path="/sign-up"
-          />
-          <PublicRoute component={Print} path="/print/:id" />
-          <PrivateRoute component={LazyLoader(Restricted)} path="/private" />
-          <Authguard>
-            <Home />
-          </Authguard>
-          <PublicRoute
-            restricted={false}
-            component={LazyLoader(PageNotFound)}
-            path="*"
-          />
-        </Switch>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/login">
+          {localStorage.getItem("logged") ? (
+            <Redirect to="/view-items" />
+          ) : (
+            <Login />
+          )}
+        </Route>
+        <PublicRoute
+          restricted={false}
+          component={LazyLoader(SignUp)}
+          path="/sign-up"
+        />
+        <PublicRoute component={Print} path="/print/:id" />
+        <PrivateRoute component={LazyLoader(Restricted)} path="/private" />
+        <Authguard>
+          <Home />
+        </Authguard>
+        <PublicRoute
+          restricted={false}
+          component={LazyLoader(PageNotFound)}
+          path="*"
+        />
+      </Switch>
+    </BrowserRouter>
   );
 }

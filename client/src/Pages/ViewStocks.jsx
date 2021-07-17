@@ -72,13 +72,11 @@ export const ViewStocks = (props) => {
   };
 
   useEffect(() => {
-    console.log(props);
     http.get(apis.GET_ITEMS).then((res) => {
       if (!res.data.error) {
         setData(res.data.results.products);
       }
     });
-    //   .finally(() => props.loading(false));
   }, []);
 
   const getTotal = () => {
@@ -90,7 +88,7 @@ export const ViewStocks = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         View Stocks
       </Typography.Title>
@@ -99,6 +97,7 @@ export const ViewStocks = (props) => {
         columns={columns}
         dataSource={data}
         size="small"
+        rowKey="_id"
         footer={() => (
           <Typography.Title
             level={5}
@@ -108,7 +107,7 @@ export const ViewStocks = (props) => {
           </Typography.Title>
         )}
       />
-    </div>
+    </>
   );
 };
 

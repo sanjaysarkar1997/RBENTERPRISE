@@ -235,7 +235,6 @@ export const CreateBill = (props) => {
           </Button>,
         ]}
       >
-        {console.log(product)}
         <table className="table">
           <thead>
             <tr>

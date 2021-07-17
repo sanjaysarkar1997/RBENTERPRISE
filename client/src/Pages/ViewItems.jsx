@@ -82,7 +82,6 @@ export const ViewBills = (props) => {
   ];
 
   const deleteProduct = (id) => {
-    console.log(id);
     http
       .post(apis.DELETE_ITEM, { id: id })
       .then((res) => console.log(res))
@@ -101,7 +100,6 @@ export const ViewBills = (props) => {
   };
 
   const getItems = () => {
-    console.log(props);
     props.loading(true);
     http
       .get(apis.GET_ITEMS)
@@ -133,7 +131,7 @@ export const ViewBills = (props) => {
   }, [productName]);
 
   return (
-    <div>
+    <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         View Items
       </Typography.Title>
@@ -142,8 +140,13 @@ export const ViewBills = (props) => {
         onChange={(e) => setProductName(e.target.value)}
       />
       <Divider></Divider>
-      <Table columns={columns} dataSource={filteredData} size="small" />
-    </div>
+      <Table
+        columns={columns}
+        dataSource={filteredData}
+        size="small"
+        rowKey="_id"
+      />
+    </>
   );
 };
 
