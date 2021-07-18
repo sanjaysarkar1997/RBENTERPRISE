@@ -59,7 +59,7 @@ const AddItem = (props) => {
         })
         .finally(() => props.loading(false));
     } else {
-      values.SKU = customId();
+      values.SKU = customId(10);
       http
         .post(apis.ADD_ITEM, values)
         .then((res) => {

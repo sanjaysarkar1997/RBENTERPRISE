@@ -17,6 +17,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 import { loading } from "../Redux/action/loading";
+import customId from "../services/customId";
 
 export const CreateBill = (props) => {
   const { Option } = Select;
@@ -133,7 +134,10 @@ export const CreateBill = (props) => {
 
     let data = customer;
     data.dateOfBilling = dateOfBilling;
+    data.billNo = customId(6);
     data.products = dataSource;
+    delete data.__v;
+    delete data._id;
 
     if (Object.keys(data).length > 0) {
       http
@@ -255,11 +259,17 @@ export const CreateBill = (props) => {
                   onChange={handleChange}
                   showSearch
                 >
-                  {products.map((ele, i) => (
-                    <Option value={ele?.productCode} key={i}>
-                      {ele.productCode + " - " + ele.productName}
-                    </Option>
-                  ))}
+                  {products.map((ele, i) => {
+                    if (ele.stock) {
+                      return (
+                        <Option value={ele?.productCode} key={i}>
+                          {ele.productCode + " - " + ele.productName}
+                        </Option>
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
                 </Select>
               </td>
 

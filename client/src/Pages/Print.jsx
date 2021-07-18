@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 
@@ -35,9 +36,11 @@ export default function Print() {
           >
             <div>
               Bill No:&emsp;
-              <strong>{printDetails?._id}</strong>
+              <strong>{printDetails?.billNo}</strong>
             </div>
-            <div>Date: {printDetails?.dateOfBilling}</div>
+            <div>
+              Date: {moment(printDetails?.dateOfBilling).format("DD/MM/YYYY")}
+            </div>
           </div>
           <div class="card-body">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -73,7 +76,7 @@ export default function Print() {
             <br />
 
             <div class="table-responsive-sm">
-              <table class="table table-striped">
+              <table class="table table-bordered">
                 <thead>
                   <tr>
                     <th class="center">#</th>

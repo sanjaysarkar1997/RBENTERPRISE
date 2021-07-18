@@ -65,8 +65,11 @@ function Home(props) {
           <Menu.Item key="/create-customer" icon={<PlusOutlined />}>
             <Link to="/create-customer">Create Customer</Link>
           </Menu.Item>
-          <Menu.Item key="/sales-report" icon={<PlusOutlined />}>
+          <Menu.Item key="/sales-report" icon={<TableOutlined />}>
             <Link to="/sales-report">Sales Report</Link>
+          </Menu.Item>
+          <Menu.Item key="/customer-report" icon={<TableOutlined />}>
+            <Link to="/customer-report">Customer Report</Link>
           </Menu.Item>
         </Menu>
       </Sider>

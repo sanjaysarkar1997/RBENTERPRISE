@@ -1,8 +1,8 @@
 const { customAlphabet } = require("nanoid");
 const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const nanoid = customAlphabet(alphabet, 10);
 
-const customId = () => {
+const customId = (length) => {
+  const nanoid = customAlphabet(alphabet, length);
   return nanoid();
 };
 

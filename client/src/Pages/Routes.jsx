@@ -4,6 +4,7 @@ import AddItem from "./AddItem";
 import { AddStocks } from "./AddStocks";
 import CreateBill from "./CreateBill";
 import CreateCustomer from "./CreateCustomer";
+import { CustomerReport } from "./CustomerReport";
 import { SalesReport } from "./SalesReport";
 import ViewBills from "./ViewBills";
 import ViewItems from "./ViewItems";
@@ -37,7 +38,10 @@ export default function Routes() {
         <ViewStocks />
       </Route>
       <Route path="/sales-report">
-        <SalesReport/>
+        <SalesReport />
+      </Route>
+      <Route path="/customer-report">
+        <CustomerReport />
       </Route>
     </Switch>
   );

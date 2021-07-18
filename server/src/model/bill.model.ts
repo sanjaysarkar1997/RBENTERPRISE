@@ -9,6 +9,9 @@ let bill = new Schema({
   dateOfBilling: {
     type: String,
   },
+  billNo: {
+    type: String,
+  },
   Address1: {
     type: String,
   },
