@@ -219,6 +219,7 @@ export const CreateBill = (props) => {
         type="primary"
         style={{ display: "block", margin: "auto" }}
         onClick={createBill}
+        disabled={Object.keys(customer).length === 0 || dataSource.length === 0}
       >
         Create
       </Button>

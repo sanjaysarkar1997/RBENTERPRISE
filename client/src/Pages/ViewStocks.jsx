@@ -1,4 +1,4 @@
-import { Table, Tag, Typography } from "antd";
+import { Divider, Input, Table, Tag, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import http from "../apis/instance";
@@ -7,6 +7,8 @@ import { loading } from "../Redux/action/loading";
 
 export const ViewStocks = (props) => {
   const [data, setData] = useState([]);
+  const [productName, setProductName] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   const columns = [
     {
@@ -75,6 +77,7 @@ export const ViewStocks = (props) => {
     http.get(apis.GET_ITEMS).then((res) => {
       if (!res.data.error) {
         setData(res.data.results.products);
+        setFilteredData(res.data.results.products);
       }
     });
   }, []);
@@ -87,15 +90,35 @@ export const ViewStocks = (props) => {
     return Number(total).toFixed(2);
   };
 
+  const filterProducts = (filter) => {
+    let filterData = data.filter(
+      (e) =>
+        e.productName.toLowerCase().includes(filter) ||
+        e.productCode.toLowerCase().includes(filter)
+    );
+
+    setFilteredData(filterData);
+  };
+
+  useEffect(() => {
+    filterProducts(productName.trim().toLowerCase());
+  }, [productName]);
+
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         View Stocks
       </Typography.Title>
-      <br />
+
+      <Input
+        placeholder="Search Product"
+        onChange={(e) => setProductName(e.target.value)}
+      />
+      <Divider></Divider>
+
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         size="small"
         rowKey="_id"
         footer={() => (

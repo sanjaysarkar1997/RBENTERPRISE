@@ -119,8 +119,8 @@ export const ViewBills = (props) => {
   const filterProducts = (filter) => {
     let filterData = data.filter(
       (e) =>
-        e.productName.toLowerCase().includes(productName) ||
-        e.productCode.toLowerCase().includes(productName)
+        e.productName.toLowerCase().includes(filter) ||
+        e.productCode.toLowerCase().includes(filter)
     );
 
     setFilteredData(filterData);
