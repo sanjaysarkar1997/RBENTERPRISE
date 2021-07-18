@@ -1,4 +1,4 @@
-import { Form, Input, Button, Typography, InputNumber } from "antd";
+import { Form, Input, Button, Typography } from "antd";
 import { connect } from "react-redux";
 import Swal from "sweetalert2";
 import http from "../apis/instance";

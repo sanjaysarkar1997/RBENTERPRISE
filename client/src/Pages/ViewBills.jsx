@@ -1,7 +1,6 @@
 import { Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
 import moment from "moment";
@@ -35,7 +34,7 @@ const ViewBills = (props) => {
       title: "View",
       dataIndex: "_id",
       render: (record, test) => (
-        <a href={`/print/${record}`} target="_blank">
+        <a href={`/print/${record}`} target="_blank" rel="noreferrer">
           View
         </a>
       ),
@@ -44,10 +43,8 @@ const ViewBills = (props) => {
   ];
 
   const getBills = async () => {
-    // props.loading(true);
     let data = await httpServicesGet(apis.VIEW_BILLS);
     setData(data);
-    // props.loading(false);
   };
 
   useEffect(() => {
