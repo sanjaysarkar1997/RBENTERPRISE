@@ -8,7 +8,7 @@ const products = async (req: any, res: any, next: any) => {
     if (!products) {
       res.json(error("Fetch Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { products }, 200));
+      res.json(success("Fetched Successful", products, 200));
     }
   } catch (error) {
     console.log(error);
@@ -22,7 +22,7 @@ const getProduct = async (req: any, res: any, next: any) => {
     if (!product) {
       res.json(error("Fetch Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { product }, 200));
+      res.json(success("Fetched Successful", product, 200));
     }
   } catch (error) {}
 };
@@ -34,7 +34,7 @@ const createProduct = (req: any, res: any, next: any) => {
     if (err) {
       res.json(error("Failed", 300));
     } else {
-      res.json(success("Creation Successful", { product: result }, 201));
+      res.json(success("Creation Successful", result, 201));
     }
   });
 };
@@ -49,7 +49,7 @@ const stockUpdate = async (req: any, res: any, next: any) => {
     if (!product) {
       res.json(error("Update Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { product }, 200));
+      res.json(success("Fetched Successful", product, 200));
     }
   } catch (error) {
     console.log(error);

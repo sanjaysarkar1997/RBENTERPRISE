@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
 import { loading } from "../Redux/action/loading";
 import customId from "../services/customId";
+import { httpServicesGet } from "../services/httpServices";
 
 export const CreateBill = (props) => {
   const { Option } = Select;
@@ -44,23 +45,20 @@ export const CreateBill = (props) => {
     setQuantity(0);
   };
 
-  useEffect(() => {
-    http.get(apis.GET_ITEMS).then((res) => {
-      if (res.data.error) {
-      } else {
-        setProducts(res.data.results.products);
-      }
-    });
-  }, []);
+  const getItems = async () => {
+    let data = await httpServicesGet(apis.GET_ITEMS);
+    setProducts(data);
+  };
 
   useEffect(() => {
-    http.get(apis.GET_CUSTOMERS).then((res) => {
-      if (res.data.error) {
-      } else {
-        setCustomers(res.data.results.customers);
-      }
-    });
+    getCustomer();
+    getItems();
   }, []);
+
+  const getCustomer = async () => {
+    let data = await httpServicesGet(apis.GET_CUSTOMERS);
+    setCustomers(data);
+  };
 
   const columns = [
     {

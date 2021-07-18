@@ -7,7 +7,7 @@ const customers = async (req: any, res: any, next: any) => {
     if (!customers) {
       res.json(error("Fetch Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { customers }, 200));
+      res.json(success("Fetched Successful", customers, 200));
     }
   } catch (error) {
     console.log(error);
@@ -21,7 +21,7 @@ const getCustomer = async (req: any, res: any, next: any) => {
     if (!customer) {
       res.json(error("Fetch Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { customer }, 200));
+      res.json(success("Fetched Successful", customer, 200));
     }
   } catch (error) {}
 };
@@ -33,7 +33,7 @@ const createCustomer = (req: any, res: any, next: any) => {
     if (err) {
       res.json(error("Failed", 300));
     } else {
-      res.json(success("Creation Successful", { customer: result }, 201));
+      res.json(success("Creation Successful", result, 201));
     }
   });
 };

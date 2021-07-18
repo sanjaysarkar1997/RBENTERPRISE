@@ -9,7 +9,7 @@ const bills = async (req: any, res: any, next: any) => {
     if (!bill) {
       res.json(error("Fetch Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { bill }, 200));
+      res.json(success("Fetched Successful", bill, 200));
     }
   } catch (error) {
     console.log(error);
@@ -23,7 +23,7 @@ const getBill = async (req: any, res: any, next: any) => {
     if (!bill) {
       res.json(error("Fetch Failed", 300));
     } else {
-      res.json(success("Fetched Successful", { bill }, 200));
+      res.json(success("Fetched Successful", bill, 200));
     }
   } catch (error) {}
 };
@@ -33,25 +33,25 @@ const createBill = async (req: any, res: any, next: any) => {
     let data = req.body;
 
     let input = data.products;
-    let bulkArr = [];
-
-    for (const i of input) {
-      bulkArr.push({
-        updateOne: {
-          filter: { _id: Mongoose.Types.ObjectId(i.productId) },
-          update: { $inc: { stock: -i.quantity } },
-        },
-      });
-    }
-
-    await Product.bulkWrite(bulkArr);
 
     let bill = new Bill(data);
     bill.save((err: any, result: any) => {
       if (err) {
         res.json(error("Failed", 300));
       } else {
-        res.json(success("Creation Successful", { bill: result }, 201));
+        let bulkArr = [];
+
+        for (const i of input) {
+          bulkArr.push({
+            updateOne: {
+              filter: { _id: Mongoose.Types.ObjectId(i.productId) },
+              update: { $inc: { stock: -i.quantity } },
+            },
+          });
+        }
+        
+        Product.bulkWrite(bulkArr);
+        res.json(success("Creation Successful", result, 201));
       }
     });
   } catch (error) {

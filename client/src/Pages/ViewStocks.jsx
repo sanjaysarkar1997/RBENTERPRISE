@@ -1,9 +1,8 @@
 import { Divider, Input, Table, Tag, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import http from "../apis/instance";
 import apis from "../apis/urls";
-import { loading } from "../Redux/action/loading";
+import { httpServicesGet } from "../services/httpServices";
 
 export const ViewStocks = (props) => {
   const [data, setData] = useState([]);
@@ -73,13 +72,14 @@ export const ViewStocks = (props) => {
     }
   };
 
+  const getItems = async () => {
+    let data = await httpServicesGet(apis.GET_ITEMS);
+    setData(data);
+    setFilteredData(data);
+  };
+
   useEffect(() => {
-    http.get(apis.GET_ITEMS).then((res) => {
-      if (!res.data.error) {
-        setData(res.data.results.products);
-        setFilteredData(res.data.results.products);
-      }
-    });
+    getItems();
   }, []);
 
   const getTotal = () => {
@@ -136,6 +136,6 @@ export const ViewStocks = (props) => {
 
 const mapStateToProps = (state) => ({});
 
-const mapDispatchToProps = { loading };
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewStocks);

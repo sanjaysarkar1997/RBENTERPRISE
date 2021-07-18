@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import http from "../apis/instance";
 import apis from "../apis/urls";
-import { loading } from "../Redux/action/loading";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { httpServicesGet } from "../services/httpServices";
 
 export const ViewBills = (props) => {
   const [data, setData] = useState([]);
@@ -99,17 +99,10 @@ export const ViewBills = (props) => {
     }
   };
 
-  const getItems = () => {
-    props.loading(true);
-    http
-      .get(apis.GET_ITEMS)
-      .then((res) => {
-        if (!res.data.error) {
-          setData(res.data.results.products);
-          setFilteredData(res.data.results.products);
-        }
-      })
-      .finally(() => props.loading(false));
+  const getItems = async () => {
+    let data = await httpServicesGet(apis.GET_ITEMS);
+    setData(data);
+    setFilteredData(data);
   };
 
   useEffect(() => {
@@ -122,7 +115,6 @@ export const ViewBills = (props) => {
         e.productName.toLowerCase().includes(filter) ||
         e.productCode.toLowerCase().includes(filter)
     );
-
     setFilteredData(filterData);
   };
 
@@ -152,6 +144,6 @@ export const ViewBills = (props) => {
 
 const mapStateToProps = (state) => ({});
 
-const mapDispatchToProps = { loading };
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewBills);

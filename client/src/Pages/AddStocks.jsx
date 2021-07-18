@@ -1,11 +1,12 @@
-import { Button, Divider, InputNumber, Select, Typography, Form } from "antd";
-
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { Button, Divider, InputNumber, Select, Typography, Form } from "antd";
 import Swal from "sweetalert2";
 import http from "../apis/instance";
 import apis from "../apis/urls";
+import { loading } from "../Redux/action/loading";
+import { httpServicesGet } from "../services/httpServices";
 
 const { Option } = Select;
 
@@ -17,10 +18,13 @@ export const AddStocks = (props) => {
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState({});
 
+  const getProducts = async () => {
+    let data = await httpServicesGet(apis.GET_ITEMS);
+    setProducts(data);
+  };
+
   useEffect(() => {
-    http
-      .get(apis.GET_ITEMS)
-      .then((res) => setProducts(res.data.results.products));
+    getProducts();
   }, []);
 
   function handleChange(value) {
@@ -126,6 +130,13 @@ export const AddStocks = (props) => {
 
 const mapStateToProps = (state) => ({});
 
-const mapDispatchToProps = {};
+// const mapDispatchToProps = {
+//   loading,
+// };
+function mapDispatchToProps(dispatch) {
+  return {
+    loading: () => dispatch(loading()),
+  };
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddStocks);

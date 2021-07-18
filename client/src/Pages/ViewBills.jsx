@@ -5,6 +5,7 @@ import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
 import moment from "moment";
+import { httpServicesGet } from "../services/httpServices";
 
 const ViewBills = (props) => {
   const [data, setData] = useState([]);
@@ -42,16 +43,15 @@ const ViewBills = (props) => {
     },
   ];
 
+  const getBills = async () => {
+    // props.loading(true);
+    let data = await httpServicesGet(apis.VIEW_BILLS);
+    setData(data);
+    // props.loading(false);
+  };
+
   useEffect(() => {
-    props.loading(true);
-    http
-      .get(apis.VIEW_BILLS)
-      .then((res) => {
-        if (!res.data.error) {
-          setData(res.data.results.bill);
-        }
-      })
-      .finally(() => props.loading(false));
+    getBills();
   }, []);
 
   return (
@@ -66,6 +66,4 @@ const ViewBills = (props) => {
 
 const mapStateToProps = (state) => ({});
 
-const mapDispatchToProps = { loading };
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewBills);
+export default connect(mapStateToProps, loading)(ViewBills);
