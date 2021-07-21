@@ -49,7 +49,7 @@ const createBill = async (req: any, res: any, next: any) => {
             },
           });
         }
-        
+
         Product.bulkWrite(bulkArr);
         res.json(success("Creation Successful", result, 201));
       }
@@ -59,9 +59,9 @@ const createBill = async (req: any, res: any, next: any) => {
   }
 };
 
-const updateMovie = async (req: any, res: any, next: any) => {};
+const updateBill = async (req: any, res: any, next: any) => {};
 
-export { bills, createBill, updateMovie, getBill };
+export { bills, createBill, updateBill, getBill };
 
 // {
 //   "productName": "This is product 3",

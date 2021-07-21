@@ -13,6 +13,7 @@ export const ViewBills = (props) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const columns = [
+    
     {
       title: "Product Code",
       dataIndex: "productCode",

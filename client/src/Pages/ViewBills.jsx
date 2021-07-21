@@ -30,6 +30,7 @@ const ViewBills = (props) => {
       dataIndex: "Address1",
       key: "address",
     },
+
     {
       title: "View",
       dataIndex: "_id",

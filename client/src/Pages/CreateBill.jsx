@@ -7,14 +7,14 @@ import {
   Table,
   InputNumber,
   Divider,
+  Modal,
 } from "antd";
 import { connect } from "react-redux";
-import Modal from "antd/lib/modal/Modal";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 import moment from "moment";
 import Swal from "sweetalert2";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { loading } from "../Redux/action/loading";
 import customId from "../services/customId";
 import { httpServicesGet } from "../services/httpServices";
@@ -26,11 +26,32 @@ export const CreateBill = (props) => {
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [products, setProducts] = useState([]);
-  const [dateOfBilling, setDateOfBilling] = useState(moment());
+  const [dateOfBilling, setDateOfBilling] = useState();
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({});
 
   const history = useHistory();
+
+  const { id } = useParams();
+
+  const getBills = async () => {
+    let data = await httpServicesGet(apis.VIEW_BILL + "/" + id);
+    setCustomer({
+      customerName: data.customerName,
+      Address1: data.Address1,
+      Address2: data.Address2,
+      mobileNumber: data.mobileNumber,
+      _id: data._id,
+    });
+    setDataSource(data.products);
+    setDateOfBilling(data.dateOfBilling);
+  };
+
+  useEffect(() => {
+    if (id) {
+      getBills();
+    }
+  }, [id]);
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -81,9 +102,23 @@ export const CreateBill = (props) => {
       key: "rate",
     },
     {
+      title: "GST",
+      dataIndex: "gst",
+      key: "gst",
+    },
+    {
       title: "Total Amount",
       dataIndex: "total",
       key: "total",
+    },
+    {
+      title: "Edit",
+      render: (record) => (
+        <Button type="primary" onClick={() => deleteItem(record.productId)}>
+          Delete
+        </Button>
+      ),
+      key: "_id",
     },
   ];
 
@@ -108,6 +143,7 @@ export const CreateBill = (props) => {
       rate: product.salePrice,
       total: Number((Number(product.salePrice) * Number(quantity)).toFixed(3)),
       productId: product._id,
+      gst: product.GST,
     };
 
     data.push(obj);
@@ -117,10 +153,15 @@ export const CreateBill = (props) => {
     setQuantity(0);
   };
 
+  const deleteItem = (id) => {
+    let data = dataSource;
+    const filteredData = data.filter((ele) => ele.productId !== id);
+    setDataSource(filteredData);
+  };
+
   const getTotal = () => {
     let total = 0;
     for (let i = 0; i < dataSource.length; i++) {
-      console.log(dataSource[i].total);
       total = total + dataSource[i].total;
     }
     return Number(total).toFixed(2);
@@ -129,43 +170,49 @@ export const CreateBill = (props) => {
   const createBill = () => {
     props.loading(true);
 
-    let data = customer;
-    data.dateOfBilling = dateOfBilling;
-    data.billNo = customId(6);
-    data.products = dataSource;
-    delete data.__v;
-    delete data._id;
-
-    if (Object.keys(data).length > 0) {
-      http
-        .post(apis.CREATE_BILL, data)
-        .then((res) => {
-          if (res.data.error) {
-            console.log(res);
-          } else {
-            Swal.fire("Success", "Bill Created Successfully", "success").then(
-              () => history.push("/view-bills")
-            );
-          }
-        })
-        .finally(() => props.loading(false));
-      console.log(data);
+    if (id) {
     } else {
-      console.log("Error");
+      let data = customer;
+      data.dateOfBilling = dateOfBilling;
+      data.billNo = customId(6);
+      data.products = dataSource;
+      delete data.__v;
+      delete data._id;
+
+      if (Object.keys(data).length > 0) {
+        http
+          .post(apis.CREATE_BILL, data)
+          .then((res) => {
+            if (res.data.error) {
+              console.log(res);
+            } else {
+              Swal.fire("Success", "Bill Created Successfully", "success").then(
+                () => history.push("/view-bills")
+              );
+            }
+          })
+          .finally(() => props.loading(false));
+        console.log(data);
+      } else {
+        console.log("Error");
+      }
     }
   };
 
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
-        Create Bill
+        {id ? "Update" : "Create"} Bill
       </Typography.Title>
+      {console.log(customer)}
       <div style={{ display: "flex" }}>
         <Select
           placeholder="Select Customer"
           style={{ width: "100%" }}
           onChange={handleCustomer}
+          defaultValue={customer.customerName}
           showSearch
+          key={customer.customerName}
         >
           {customers.map((ele, i) => (
             <Option value={ele?.customerName} key={i}>
@@ -175,9 +222,11 @@ export const CreateBill = (props) => {
         </Select>
         &emsp;
         <DatePicker
+          key={customer.dateOfBilling}
           format={"DD/MM/YYYY"}
           onChange={(e) => setDateOfBilling(e)}
-          defaultValue={moment()}
+          value={moment(dateOfBilling)}
+          // disabled={id !== undefined}
         />
       </div>
       <br />
@@ -199,6 +248,7 @@ export const CreateBill = (props) => {
             </Typography.Title>
           )}
           size="small"
+          rowKey="productId"
         />
       )}
       <div>
@@ -215,10 +265,18 @@ export const CreateBill = (props) => {
       <Button
         type="primary"
         style={{ display: "block", margin: "auto" }}
-        onClick={createBill}
+        onClick={() =>
+          Modal.confirm({
+            title: "Confirm",
+            icon: "",
+            okText: "Yes",
+            cancelText: "Cancel",
+            onOk: () => createBill(),
+          })
+        }
         disabled={Object.keys(customer).length === 0 || dataSource.length === 0}
       >
-        Create
+        {id ? "Update" : "Create"}
       </Button>
 
       <Modal

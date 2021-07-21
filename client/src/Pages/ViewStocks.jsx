@@ -10,6 +10,7 @@ export const ViewStocks = (props) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const columns = [
+    
     {
       title: "Product Code",
       dataIndex: "productCode",

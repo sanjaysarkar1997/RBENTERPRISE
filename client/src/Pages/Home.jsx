@@ -56,14 +56,17 @@ function Home(props) {
           <Menu.Item key="/view-stocks" icon={<TableOutlined />}>
             <Link to="/view-stocks">View Stocks</Link>
           </Menu.Item>
+          <Menu.Item key="/create-customer" icon={<PlusOutlined />}>
+            <Link to="/create-customer">Create Customer</Link>
+          </Menu.Item>
+          <Menu.Item key="/view-customers" icon={<TableOutlined />}>
+            <Link to="/view-customers">View Customers</Link>
+          </Menu.Item>
           <Menu.Item key="/create-bill" icon={<PlusOutlined />}>
             <Link to="/create-bill">Create Bill</Link>
           </Menu.Item>
           <Menu.Item key="/view-bills" icon={<TableOutlined />}>
             <Link to="/view-bills">View Bills</Link>
-          </Menu.Item>
-          <Menu.Item key="/create-customer" icon={<PlusOutlined />}>
-            <Link to="/create-customer">Create Customer</Link>
           </Menu.Item>
           <Menu.Item key="/sales-report" icon={<TableOutlined />}>
             <Link to="/sales-report">Sales Report</Link>

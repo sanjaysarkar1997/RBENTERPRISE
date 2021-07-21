@@ -8,11 +8,11 @@ import apis from "../apis/urls";
 export default function Print() {
   const { id } = useParams();
   const [printDetails, setPrintDetails] = useState({});
-  console.log(id);
+
   useEffect(() => {
     http.get(apis.VIEW_BILL + "/" + id).then((res) => {
       if (!res.data.error) {
-        setPrintDetails(res.data.results.bill);
+        setPrintDetails(res.data.results);
       }
     });
   }, [id]);
@@ -26,26 +26,25 @@ export default function Print() {
   };
 
   return (
-    <div class="container-fluid">
+    <div className="container-fluid">
       <div style={{ display: "flex" }}>
-        {/* {data.map((ele) => ( */}
-        <div class="card" style={{ width: "100%" }}>
+        <div className="card" style={{ width: "100%" }}>
           <div
-            class="card-header"
+            className="card-header"
             style={{ display: "flex", justifyContent: "space-between" }}
           >
             <div>
-              Bill No:&emsp;
+              Bill No :&nbsp;
               <strong>{printDetails?.billNo}</strong>
             </div>
             <div>
               Date: {moment(printDetails?.dateOfBilling).format("DD/MM/YYYY")}
             </div>
           </div>
-          <div class="card-body">
+          <div className="card-body">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
-                <h6 class="mb-3">From:</h6>
+                <h6 className="mb-2">From:</h6>
                 <div>
                   <strong>R B ENTERPRISE</strong>
                 </div>
@@ -58,14 +57,18 @@ export default function Print() {
               </div>
 
               <div>
-                <h6 class="mb-3">To:</h6>
+                <h6 className="mb-2">To:</h6>
                 <div>
                   <strong>{printDetails?.customerName}</strong>
                 </div>
-                <div>{printDetails?.Address}</div>
+                <div>{printDetails?.Address1}</div>
+                <div>{printDetails?.Address2}</div>
+                <div>
+                  <b>{printDetails?.mobileNumber}</b>
+                </div>
               </div>
               <div>
-                <h6 class="mb-3" style={{ textAlign: "right" }}>
+                <h6 className="mb-3" style={{ textAlign: "right" }}>
                   Scan to view:
                 </h6>
                 <div style={{ textAlign: "right" }}>
@@ -75,37 +78,44 @@ export default function Print() {
             </div>
             <br />
 
-            <div class="table-responsive-sm">
-              <table class="table table-bordered">
+            <div className="table-responsive-sm">
+              <table className="table table-bordered table-sm">
                 <thead>
                   <tr>
-                    <th class="center">#</th>
+                    <th className="center">#</th>
                     <th>Particular</th>
-                    <th class="right">MRP</th>
-                    <th class="center">Qty</th>
+                    <th className="right">MRP</th>
+                    <th className="center">Qty</th>
                     <th>Rate</th>
-                    <th class="right">Total</th>
+                    <th>GST</th>
+                    <th className="right">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {printDetails?.products?.map((ele, i) => (
-                    <tr>
-                      <td style={{ padding: "0px 3px" }} class="center">
+                    <tr key={i}>
+                      <td style={{ padding: "2px 3px" }} className="center">
                         {i + 1}
                       </td>
-                      <td style={{ padding: "0px 3px" }} class="left strong">
+                      <td
+                        style={{ padding: "2px 3px" }}
+                        className="left strong"
+                      >
                         {ele.particular}
                       </td>
-                      <td style={{ padding: "0px 3px" }} class="right">
+                      <td style={{ padding: "2px 3px" }} className="right">
                         ₹ {ele.mrp}
                       </td>
-                      <td style={{ padding: "0px 3px" }} class="center">
+                      <td style={{ padding: "2px 3px" }} className="center">
                         {ele.quantity}
                       </td>
-                      <td style={{ padding: "0px 3px" }} class="right">
+                      <td style={{ padding: "2px 3px" }} className="right">
                         ₹ {ele.rate}
                       </td>
-                      <td style={{ padding: "0px 3px" }} class="right">
+                      <td style={{ padding: "2px 3px" }} className="right">
+                        ₹ {ele?.gst}
+                      </td>
+                      <td style={{ padding: "2px 3px" }} className="right">
                         ₹{" "}
                         {Number(
                           (Number(ele.rate) * Number(ele.quantity)).toFixed(3)
@@ -119,13 +129,13 @@ export default function Print() {
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div></div>
               <div>
-                <table class="table table-clear">
+                <table className="table table-clear">
                   <tbody>
                     <tr>
-                      <td class="left">
+                      <td className="left">
                         <strong>Grand Total</strong>
                       </td>
-                      <td class="right">
+                      <td className="right">
                         <strong>₹ {getTotal()}</strong>
                       </td>
                     </tr>
@@ -139,11 +149,13 @@ export default function Print() {
             <br />
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ width: "200px" }}>
-                <table class="table table-clear">
+                <table className="table table-clear">
                   <tbody>
                     <tr>
-                      <td class="left">{/* <strong>Grand Total</strong> */}</td>
-                      <td class="right"></td>
+                      <td className="left">
+                        {/* <strong>Grand Total</strong> */}
+                      </td>
+                      <td className="right"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -153,11 +165,13 @@ export default function Print() {
               </div>
 
               <div style={{ width: "200px" }}>
-                <table class="table table-clear">
+                <table className="table table-clear">
                   <tbody>
                     <tr>
-                      <td class="left">{/* <strong>Grand Total</strong> */}</td>
-                      <td class="right"></td>
+                      <td className="left">
+                        {/* <strong>Grand Total</strong> */}
+                      </td>
+                      <td className="right"></td>
                     </tr>
                   </tbody>
                 </table>

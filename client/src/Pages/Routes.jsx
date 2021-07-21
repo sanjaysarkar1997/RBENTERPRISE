@@ -7,6 +7,7 @@ import CreateCustomer from "./CreateCustomer";
 import { CustomerReport } from "./CustomerReport";
 import { SalesReport } from "./SalesReport";
 import ViewBills from "./ViewBills";
+import ViewCustomer from "./ViewCustomer";
 import ViewItems from "./ViewItems";
 import { ViewStocks } from "./ViewStocks";
 
@@ -42,6 +43,13 @@ export default function Routes() {
       </Route>
       <Route path="/customer-report">
         <CustomerReport />
+      </Route>
+      <Route path="/view-customers">
+        <ViewCustomer />
+      </Route>
+
+      <Route path="/edit-bill/:id">
+        <CreateBill />
       </Route>
     </Switch>
   );

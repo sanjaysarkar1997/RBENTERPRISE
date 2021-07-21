@@ -19,7 +19,7 @@ const AddItem = (props) => {
     http.get(apis.GET_ITEM + "/" + id).then((res) => {
       if (res.data.error) {
       } else {
-        let product = res.data.results.product;
+        let product = res.data.results;
         setSKU(product.SKU);
 
         form.setFieldsValue({

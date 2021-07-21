@@ -9,7 +9,12 @@ import {
   stockUpdate,
   updateProduct,
 } from "../controller/product.controller";
-import { bills, createBill, getBill } from "../controller/bill.controller";
+import {
+  bills,
+  createBill,
+  getBill,
+  updateBill,
+} from "../controller/bill.controller";
 import { createCustomer, customers } from "../controller/customer.controller";
 
 const router = express.Router();
@@ -19,6 +24,7 @@ router.get("/get-product/:id", getProduct);
 router.get("/get-bills", bills);
 router.get("/get-bill/:id", getBill);
 router.post("/create-bill", createBill);
+router.post("/update-bill", updateBill);
 router.post("/create-product", createProduct);
 router.post("/update-stock", stockUpdate);
 router.post("/update-item", updateProduct);
