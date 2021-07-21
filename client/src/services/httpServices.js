@@ -26,6 +26,7 @@ const httpServicesGet = async (url) => {
     }
   } catch (error) {
     Swal.fire("Error", "Something went wrong", "error");
+    return [];
   } finally {
     store.dispatch(loading(false));
   }
