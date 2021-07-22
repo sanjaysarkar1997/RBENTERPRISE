@@ -20,6 +20,9 @@ export default function Routes() {
       <Route path="/update-item/:id">
         <AddItem />
       </Route>
+      <Route path="/update-customer/:id">
+        <CreateCustomer />
+      </Route>
       <Route exact path="/view-items">
         <ViewItems />
       </Route>
@@ -48,9 +51,9 @@ export default function Routes() {
         <ViewCustomer />
       </Route>
 
-      <Route path="/edit-bill/:id">
+      {/* <Route path="/edit-bill/:id">
         <CreateBill />
-      </Route>
+      </Route> */}
     </Switch>
   );
 }

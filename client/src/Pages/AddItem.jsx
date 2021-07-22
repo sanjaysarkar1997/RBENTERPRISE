@@ -45,7 +45,6 @@ const AddItem = (props) => {
     if (id) {
       values.SKU = SKU;
       values.id = id;
-      console.log(values);
       http
         .post(apis.UPDATE_ITEM, values)
         .then((res) => {

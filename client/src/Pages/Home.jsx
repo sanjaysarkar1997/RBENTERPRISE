@@ -9,6 +9,8 @@ import {
 } from "@ant-design/icons";
 import Routes from "./Routes";
 import { Link } from "react-router-dom";
+import { httpServicesGet } from "../services/httpServices";
+import apis from "../apis/urls";
 
 function Home(props) {
   const { Header, Sider, Content } = Layout;
@@ -20,8 +22,11 @@ function Home(props) {
     setCollapsed(!collapsed);
   };
 
+  const getLoaded = async () => {};
+
   useEffect(() => {
     setKey(window.location.pathname);
+    getLoaded();
   }, []);
 
   return (

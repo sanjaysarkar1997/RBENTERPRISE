@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 const Login = (props) => {
   const history = useHistory();
   const onFinish = (values) => {
-    console.log("Success:", values);
     if (values.username === "bardhanrupam5" && values.password === "12345") {
       localStorage.setItem("logged", true);
       history.push("/view-bills");

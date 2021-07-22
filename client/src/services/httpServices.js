@@ -7,7 +7,12 @@ const httpServicesPost = async (url, data = {}, header = {}) => {
   try {
     store.dispatch(loading(true));
     let returnData = await http.post(url, data, header);
-    console.log(returnData);
+    if (returnData.data.error) {
+      Swal.fire("Error", "Something went wrong", "error");
+      return [];
+    } else {
+      return returnData.data.results;
+    }
   } catch (error) {
     Swal.fire("Error", "Something went wrong", "error");
   } finally {

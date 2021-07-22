@@ -1,5 +1,6 @@
 import Customer from "../model/customer.model";
 import { error, success } from "../services/responseModifier";
+const Mongoose = require("mongoose");
 
 const customers = async (req: any, res: any, next: any) => {
   try {
@@ -38,6 +39,37 @@ const createCustomer = (req: any, res: any, next: any) => {
   });
 };
 
-const updateCustomer = async (req: any, res: any, next: any) => {};
+const updateCustomer = async (req: any, res: any, next: any) => {
+  try {
+    console.log(req.body);
+    let data = req.body;
+    let product = await Customer.findByIdAndUpdate(req.body.id, data);
+    if (!product) {
+      res.json(error("Fetch Failed", 300));
+    } else {
+      res.json(success("Fetched Successful", product, 200));
+    }
+  } catch (error) {}
+};
 
-export { customers, createCustomer, updateCustomer, getCustomer };
+const deleteCustomer = async (req: any, res: any, next: any) => {
+  try {
+    let id = req.body.id;
+    let product = await Customer.deleteOne({
+      _id: Mongoose.Types.ObjectId(id),
+    });
+    if (!product) {
+      res.json(error("Fetch Failed", 300));
+    } else {
+      res.json(success("Deleted Successfully", product, 200));
+    }
+  } catch (error) {}
+};
+
+export {
+  customers,
+  createCustomer,
+  updateCustomer,
+  getCustomer,
+  deleteCustomer,
+};

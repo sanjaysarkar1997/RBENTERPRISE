@@ -1,27 +1,68 @@
 import { Form, Input, Button, Typography } from "antd";
+import { useEffect } from "react";
 import { connect } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
+import { httpServicesGet } from "../services/httpServices";
 
 const CreateCustomer = (props) => {
   const [form] = Form.useForm();
 
+  const { id } = useParams();
+  const history = useHistory();
+
+  const getProduct = async () => {
+    let customer = await httpServicesGet(apis.GET_CUSTOMER + "/" + id);
+    console.log(customer);
+    if (Object.keys(customer).length > 0) {
+      form.setFieldsValue({
+        customerName: customer.customerName,
+        Address1: customer.Address1,
+        Address2: customer.Address2,
+        mobileNumber: customer.mobileNumber,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      getProduct();
+    }
+  }, [id]);
+
   const onFinish = (values) => {
     props.loading(true);
-    http
-      .post(apis.CREATE_CUSTOMER, values)
-      .then((res) => {
-        if (res.data.error) {
-          console.log(res);
-        } else {
-          Swal.fire("Success", "Customer Addded", "success").then(() =>
-            form.resetFields()
-          );
-        }
-      })
-      .finally(() => props.loading(false));
+    if (id) {
+      values.id = id;
+      http
+        .post(apis.UPDATE_CUSTOMER, values)
+        .then((res) => {
+          if (res.data.error) {
+            console.log(res);
+          } else {
+            Swal.fire("Success", "Customer Updated", "success").then(() =>
+              history.push("/view-customers")
+            );
+          }
+        })
+        .finally(() => props.loading(false));
+    } else {
+      http
+        .post(apis.CREATE_CUSTOMER, values)
+        .then((res) => {
+          if (res.data.error) {
+            console.log(res);
+          } else {
+            Swal.fire("Success", "Customer Addded", "success").then(() =>
+              form.resetFields()
+            );
+          }
+        })
+        .finally(() => props.loading(false));
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -45,7 +86,7 @@ const CreateCustomer = (props) => {
       form={form}
     >
       <Typography.Title style={{ textAlign: "center" }} level={3}>
-        Create Customer
+        {id ? "Update" : "Create"} Customer
       </Typography.Title>
 
       <Form.Item
@@ -88,7 +129,7 @@ const CreateCustomer = (props) => {
         }}
       >
         <Button type="primary" htmlType="submit">
-          Add Customer
+          {id ? "Update" : "Add"} Customer
         </Button>
       </Form.Item>
     </Form>

@@ -10,7 +10,6 @@ export const ViewStocks = (props) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const columns = [
-    
     {
       title: "Product Code",
       dataIndex: "productCode",
@@ -26,7 +25,7 @@ export const ViewStocks = (props) => {
     {
       title: "MRP",
       dataIndex: "MRP",
-      render: (MRP) => <label style={{ fontWeight: "800" }}>{MRP}</label>,
+      render: (MRP) => <label style={{ fontWeight: "800" }}> {MRP}</label>,
       key: "productName",
     },
     {
@@ -38,7 +37,7 @@ export const ViewStocks = (props) => {
     {
       title: "Sale Price",
       dataIndex: "salePrice",
-      render: (SP) => <label style={{ fontWeight: "800" }}>{SP}</label>,
+      render: (SP) => <label style={{ fontWeight: "800" }}> {SP}</label>,
       key: "salePrice",
     },
     {
