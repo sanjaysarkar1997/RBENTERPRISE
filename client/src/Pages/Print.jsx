@@ -4,7 +4,9 @@ import { useParams } from "react-router-dom";
 import moment from "moment";
 import http from "../apis/instance";
 import apis from "../apis/urls";
+import { ToWords } from "to-words";
 
+const toWords = new ToWords();
 export default function Print() {
   const { id } = useParams();
   const [printDetails, setPrintDetails] = useState({});
@@ -113,7 +115,7 @@ export default function Print() {
                         ₹ {ele.rate}
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele?.gst}
+                        {ele?.gst} %
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
                         ₹{" "}
@@ -127,13 +129,26 @@ export default function Print() {
               </table>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <div></div>
               <div>
                 <table className="table table-clear">
                   <tbody>
                     <tr>
                       <td className="left">
-                        <strong>Grand Total</strong>
+                        <strong>Grand Total:</strong>
+                      </td>
+                      <td className="right">
+                        {toWords.convert(getTotal(), { currency: true })}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div>
+                <table className="table table-clear">
+                  <tbody>
+                    <tr>
+                      <td className="left">
+                        <strong>Grand Total:</strong>
                       </td>
                       <td className="right">
                         <strong>₹ {getTotal()}</strong>

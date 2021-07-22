@@ -104,6 +104,7 @@ export const CreateBill = (props) => {
     {
       title: "GST",
       dataIndex: "gst",
+      render: (gst) => <label>{gst}%</label>,
       key: "gst",
     },
     {

@@ -1,4 +1,4 @@
-import { Table } from "antd";
+import { Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import apis from "../apis/urls";
 import { httpServicesGet } from "../services/httpServices";
@@ -31,13 +31,16 @@ export default function ViewCustomer() {
     },
   ];
   return (
-    <div>
+    <>
+      <Typography.Title style={{ textAlign: "center" }} level={3}>
+        View Customers
+      </Typography.Title>
       <Table
         columns={columns}
         dataSource={dataSource}
         size="small"
         rowKey="_id"
       />
-    </div>
+    </>
   );
 }
