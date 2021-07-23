@@ -1,13 +1,15 @@
-import { Divider, Input, Table, Tag, Typography } from "antd";
+import { Divider, Input, Table, Tag, Typography, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import apis from "../apis/urls";
 import { httpServicesGet } from "../services/httpServices";
 
 export const ViewStocks = (props) => {
+  const { Option } = Select;
   const [data, setData] = useState([]);
   const [productName, setProductName] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [stocks, setStocks] = useState(undefined);
 
   const columns = [
     {
@@ -63,7 +65,7 @@ export const ViewStocks = (props) => {
 
   const getColor = (number) => {
     let color = ["red", "#FFC107", "green"];
-    if (number < 20) {
+    if (number <= 50) {
       return color[0];
     } else if (number < 100) {
       return color[1];
@@ -104,16 +106,50 @@ export const ViewStocks = (props) => {
     filterProducts(productName.trim().toLowerCase());
   }, [productName]);
 
+  function handleChange(value) {
+    setStocks(value);
+    console.log(`selected ${value}`);
+  }
+
+  useEffect(() => {
+    let filterData = data.filter((e) => {
+      if (stocks === 100) {
+        return e.stock >= 99;
+      } else if (stocks === 99) {
+        return e.stock >= 50 && e.stock < 100;
+      }else if (stocks === 49) {
+        return e.stock > 0 && e.stock < 50;
+      } else {
+        return e.stock <= stocks;
+      }
+    });
+    console.log(filterData);
+    setFilteredData(filterData);
+  }, [stocks]);
+
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         View Stocks
       </Typography.Title>
 
-      <Input
-        placeholder="Search Product"
-        onChange={(e) => setProductName(e.target.value)}
-      />
+      <div style={{ display: "flex" }}>
+        <Input
+          placeholder="Search Product"
+          onChange={(e) => setProductName(e.target.value)}
+        />
+        &emsp;
+        <Select
+          style={{ width: 200 }}
+          onChange={handleChange}
+          placeholder="Select Stock Type"
+        >
+          <Option value={0}>No Stock</Option>
+          <Option value={49}>1 to 50</Option>
+          <Option value={99}>50 to 100</Option>
+          <Option value={100}>Above 100</Option>
+        </Select>
+      </div>
       <Divider></Divider>
 
       <Table
