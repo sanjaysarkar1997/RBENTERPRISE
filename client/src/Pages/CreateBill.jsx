@@ -26,7 +26,7 @@ export const CreateBill = (props) => {
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(0);
   const [products, setProducts] = useState([]);
-  const [dateOfBilling, setDateOfBilling] = useState();
+  const [dateOfBilling, setDateOfBilling] = useState(moment());
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({});
 
@@ -226,7 +226,7 @@ export const CreateBill = (props) => {
           key={customer.dateOfBilling}
           format={"DD/MM/YYYY"}
           onChange={(e) => setDateOfBilling(e)}
-          value={moment(dateOfBilling)}
+          value={dateOfBilling}
           // disabled={id !== undefined}
         />
       </div>

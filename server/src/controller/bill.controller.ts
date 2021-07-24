@@ -59,9 +59,22 @@ const createBill = async (req: any, res: any, next: any) => {
   }
 };
 
+const deleteBill = async (req: any, res: any, next: any) => {
+  try {
+    console.log(req.body);
+    let id = req.body.id;
+    let bill = await Bill.deleteOne({ _id: Mongoose.Types.ObjectId(id) });
+    if (!bill) {
+      res.json(error("Fetch Failed", 300));
+    } else {
+      res.json(success("Deleted Successfully", bill, 200));
+    }
+  } catch (error) {}
+};
+
 const updateBill = async (req: any, res: any, next: any) => {};
 
-export { bills, createBill, updateBill, getBill };
+export { bills, createBill, updateBill, getBill, deleteBill };
 
 // {
 //   "productName": "This is product 3",

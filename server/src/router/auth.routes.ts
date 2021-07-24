@@ -12,6 +12,7 @@ import {
 import {
   bills,
   createBill,
+  deleteBill,
   getBill,
   updateBill,
 } from "../controller/bill.controller";
@@ -40,6 +41,7 @@ router.post("/create-customer", createCustomer);
 router.get("/get-customers", customers);
 router.post("/update-customer", updateCustomer);
 router.post("/delete-customer", deleteCustomer);
+router.post("/delete-bill", deleteBill);
 
 router.post("/login", Login);
 router.post("/signup", signUp);

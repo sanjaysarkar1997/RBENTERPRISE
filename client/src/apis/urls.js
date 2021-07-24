@@ -18,6 +18,7 @@ const apis = {
   UPDATE_CUSTOMER: "update-customer",
   GET_CUSTOMER: "get-customer",
   DELETE_CUSTOMER: "delete-customer",
+  DELETE_BILL:"delete-bill"
 };
 
 export default apis;
