@@ -42,6 +42,7 @@ const createBillNonGST = async (req: any, res: any, next: any) => {
         let bulkArr = [];
 
         for (const i of input) {
+          if(!i.isVoucher)
           bulkArr.push({
             updateOne: {
               filter: { _id: Mongoose.Types.ObjectId(i.productId) },
