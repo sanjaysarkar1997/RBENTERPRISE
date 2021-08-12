@@ -13,7 +13,6 @@ export const ViewBills = (props) => {
   const [filteredData, setFilteredData] = useState([]);
 
   const columns = [
-    
     {
       title: "Product Code",
       dataIndex: "productCode",
@@ -122,6 +121,10 @@ export const ViewBills = (props) => {
   useEffect(() => {
     filterProducts(productName.trim().toLowerCase());
   }, [productName]);
+
+  // useEffect(() => {
+  //   filterProducts(productName.trim().toLowerCase());
+  // }, [filteredData]);
 
   return (
     <>

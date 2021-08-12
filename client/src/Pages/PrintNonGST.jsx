@@ -22,16 +22,24 @@ export default function PrintNonGST() {
   const getTotal = () => {
     let total = 0;
     for (let i = 0; i < printDetails?.products?.length; i++) {
-      total = total + printDetails?.products[i].total;
+      if (printDetails?.products[i].isVoucher) {
+        total = total - printDetails?.products[i].total;
+      } else {
+        total = total + printDetails?.products[i].total;
+      }
     }
     return Number(total).toFixed(2);
   };
 
   return (
     <div className="container-fluid">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         {[0, 0].map((ele, i) => (
-          <div key={i} className="card" style={{ width: "50%" }}>
+          <div
+            key={i}
+            className="card"
+            style={{ width: "49%", margin: "10px auto" }}
+          >
             <div
               className="card-header"
               style={{ display: "flex", justifyContent: "space-between" }}

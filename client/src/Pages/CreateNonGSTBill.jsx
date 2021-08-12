@@ -8,6 +8,7 @@ import {
   InputNumber,
   Divider,
   Modal,
+  Input,
 } from "antd";
 import { connect } from "react-redux";
 import http from "../apis/instance";
@@ -19,6 +20,7 @@ import { loading } from "../Redux/action/loading";
 import customId from "../services/customId";
 import { httpServicesGet } from "../services/httpServices";
 import store from "../store";
+import Checkbox from "antd/lib/checkbox/Checkbox";
 
 export const CreateNonGSTBill = (props) => {
   const { Option } = Select;
@@ -30,6 +32,9 @@ export const CreateNonGSTBill = (props) => {
   const [dateOfBilling, setDateOfBilling] = useState(moment());
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({});
+  const [key, setKey] = useState([]);
+  const [isGiftVisible, setIsGiftVisible] = useState(false);
+  const [voucher, setVoucher] = useState({});
 
   const history = useHistory();
 
@@ -81,7 +86,35 @@ export const CreateNonGSTBill = (props) => {
     setCustomers(data);
   };
 
+  const initiatedFree = (id) => {
+    let data = dataSource;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].productId === id) {
+        data[i].isFree = !data[i].isFree;
+        data[i].rate = 0;
+        data[i].total = 0;
+      }
+    }
+    console.log(data);
+    setDataSource(data);
+    setKey((prev) => [...prev, 0]);
+  };
+
   const columns = [
+    {
+      title: "Free",
+      render: (record) => (
+        <Checkbox
+          value={record.productId}
+          defaultChecked={record.isFree}
+          onChange={() => initiatedFree(record.productId)}
+          disabled={record.isFree}
+        >
+          Free
+        </Checkbox>
+      ),
+      key: "_id",
+    },
     {
       title: "Particular",
       dataIndex: "particular",
@@ -102,12 +135,7 @@ export const CreateNonGSTBill = (props) => {
       dataIndex: "rate",
       key: "rate",
     },
-    {
-      title: "GST",
-      dataIndex: "gst",
-      render: (gst) => <label>{gst}%</label>,
-      key: "gst",
-    },
+    
     {
       title: "Total Amount",
       dataIndex: "total",
@@ -146,6 +174,8 @@ export const CreateNonGSTBill = (props) => {
       total: Number((Number(product.salePrice) * Number(quantity)).toFixed(3)),
       productId: product._id,
       gst: product.GST,
+      isFree: false,
+      isVoucher: false,
     };
 
     data.push(obj);
@@ -153,6 +183,27 @@ export const CreateNonGSTBill = (props) => {
     setIsModalVisible(false);
     setProduct({});
     setQuantity(0);
+    setKey((prev) => [...prev, 0]);
+  };
+
+  const addVoucher = () => {
+    let data = dataSource;
+    let obj = {
+      particular: voucher.name,
+      mrp: 0,
+      quantity: 1,
+      rate: voucher.price,
+      total: voucher.price,
+      productId: customId(10),
+      gst: 0,
+      isFree: true,
+      isVoucher: true,
+    };
+    data.push(obj);
+    setIsGiftVisible(false);
+    setVoucher({});
+    setDataSource(data);
+    setKey((prev) => [...prev, 0]);
   };
 
   const deleteItem = (id) => {
@@ -164,7 +215,11 @@ export const CreateNonGSTBill = (props) => {
   const getTotal = () => {
     let total = 0;
     for (let i = 0; i < dataSource.length; i++) {
-      total = total + dataSource[i].total;
+      if (dataSource[i].isVoucher) {
+        total = total - dataSource[i].total;
+      } else {
+        total = total + dataSource[i].total;
+      }
     }
     return Number(total).toFixed(2);
   };
@@ -238,13 +293,14 @@ export const CreateNonGSTBill = (props) => {
       </Typography.Title>
       {Object.keys(dataSource).length !== 0 && (
         <Table
-          key={Object.keys(dataSource).length}
+          key={key.length}
           dataSource={dataSource}
           columns={columns}
           pagination={{
             defaultPageSize: 20,
             showSizeChanger: false,
           }}
+          s
           footer={() => (
             <Typography.Title
               level={5}
@@ -264,6 +320,16 @@ export const CreateNonGSTBill = (props) => {
           onClick={() => setIsModalVisible(true)}
         >
           Add Product
+        </Button>
+      </div>
+
+      <div>
+        <Button
+          style={{ display: "block", margin: "20px  auto" }}
+          type="ghost"
+          onClick={() => setIsGiftVisible(true)}
+        >
+          Add Gift
         </Button>
       </div>
 
@@ -369,6 +435,40 @@ export const CreateNonGSTBill = (props) => {
             </tr>
           </tbody>
         </table>
+      </Modal>
+      <Modal
+        title="Add Gift Card"
+        visible={isGiftVisible}
+        onOk={() => setIsGiftVisible(false)}
+        onCancel={() => setIsGiftVisible(false)}
+        width={700}
+        destroyOnClose
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Return
+          </Button>,
+          <Button key="submit" type="primary" onClick={() => addVoucher()}>
+            Add
+          </Button>,
+        ]}
+      >
+        <div style={{ display: "flex" }}>
+          <Input
+            placeholder="Name"
+            onChange={(e) =>
+              setVoucher((ele) => ({ ...ele, name: e.target.value }))
+            }
+            value={voucher.name}
+          />
+          &emsp;
+          <InputNumber
+            placeholder="Amount"
+            min={1}
+            style={{ width: "300px" }}
+            value={voucher.price}
+            onChange={(e) => setVoucher((ele) => ({ ...ele, price: e }))}
+          />
+        </div>
       </Modal>
     </>
   );
