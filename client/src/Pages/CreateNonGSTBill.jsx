@@ -18,8 +18,9 @@ import { useHistory, useParams } from "react-router-dom";
 import { loading } from "../Redux/action/loading";
 import customId from "../services/customId";
 import { httpServicesGet } from "../services/httpServices";
+import store from "../store";
 
-export const CreateBill = (props) => {
+export const CreateNonGSTBill = (props) => {
   const { Option } = Select;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [dataSource, setDataSource] = useState([]);
@@ -169,7 +170,7 @@ export const CreateBill = (props) => {
   };
 
   const createBill = () => {
-    props.loading(true);
+    store.dispatch(loading(true));
 
     if (id) {
     } else {
@@ -182,17 +183,17 @@ export const CreateBill = (props) => {
 
       if (Object.keys(data).length > 0) {
         http
-          .post(apis.CREATE_BILL, data)
+          .post(apis.CREATE_NON_GST_BILL, data)
           .then((res) => {
             if (res.data.error) {
               console.log(res);
             } else {
               Swal.fire("Success", "Bill Created Successfully", "success").then(
-                () => history.push("/view-bills")
+                () => history.push("/view-non-gst-bills")
               );
             }
           })
-          .finally(() => props.loading(false));
+          .finally(() => store.dispatch(loading(false)));
         console.log(data);
       } else {
         console.log("Error");
@@ -203,7 +204,7 @@ export const CreateBill = (props) => {
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
-        {id ? "Update" : "Create"} Bill
+        {id ? "Update" : "Create Non GST"} Bill
       </Typography.Title>
       {console.log(customer)}
       <div style={{ display: "flex" }}>
@@ -377,4 +378,4 @@ const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = { loading };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateBill);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNonGSTBill);

@@ -4,11 +4,13 @@ import AddItem from "./AddItem";
 import { AddStocks } from "./AddStocks";
 import CreateBill from "./CreateBill";
 import CreateCustomer from "./CreateCustomer";
+import { CreateNonGSTBill } from "./CreateNonGSTBill";
 import { CustomerReport } from "./CustomerReport";
 import { SalesReport } from "./SalesReport";
 import ViewBills from "./ViewBills";
 import ViewCustomer from "./ViewCustomer";
 import ViewItems from "./ViewItems";
+import ViewNonGSTBill from "./ViewNonGSTBill";
 import { ViewStocks } from "./ViewStocks";
 
 export default function Routes() {
@@ -29,11 +31,17 @@ export default function Routes() {
       <Route path="/create-bill">
         <CreateBill />
       </Route>
+      <Route path="/create-non-gst-bill">
+        <CreateNonGSTBill />
+      </Route>
       <Route path="/add-stocks">
         <AddStocks />
       </Route>
       <Route path="/view-bills">
         <ViewBills />
+      </Route>
+      <Route path="/view-non-gst-bills">
+        <ViewNonGSTBill />
       </Route>
       <Route path="/create-customer">
         <CreateCustomer />
@@ -50,10 +58,6 @@ export default function Routes() {
       <Route path="/view-customers">
         <ViewCustomer />
       </Route>
-
-      {/* <Route path="/edit-bill/:id">
-        <CreateBill />
-      </Route> */}
     </Switch>
   );
 }

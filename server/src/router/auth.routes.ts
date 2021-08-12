@@ -23,6 +23,12 @@ import {
   getCustomer,
   updateCustomer,
 } from "../controller/customer.controller";
+import {
+  billsNonGST,
+  createBillNonGST,
+  deleteBillNonGST,
+  getBillNonGST,
+} from "../controller/billNonGST.controller";
 
 const router = express.Router();
 
@@ -42,6 +48,11 @@ router.get("/get-customers", customers);
 router.post("/update-customer", updateCustomer);
 router.post("/delete-customer", deleteCustomer);
 router.post("/delete-bill", deleteBill);
+// Non GST
+router.get("/get-non-gst-bills", billsNonGST);
+router.get("/get-non-gst-bill/:id", getBillNonGST);
+router.post("/create-non-gst-bill", createBillNonGST);
+router.post("/delete-non-gst-bill", deleteBillNonGST);
 
 router.post("/login", Login);
 router.post("/signup", signUp);

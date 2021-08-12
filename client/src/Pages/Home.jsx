@@ -73,6 +73,12 @@ function Home(props) {
           <Menu.Item key="/view-bills" icon={<TableOutlined />}>
             <Link to="/view-bills">View Bills</Link>
           </Menu.Item>
+          <Menu.Item key="/create-non-gst-bill" icon={<PlusOutlined />}>
+            <Link to="/create-non-gst-bill">Create Non GST Bill</Link>
+          </Menu.Item>
+          <Menu.Item key="/view-non-gst-bills" icon={<TableOutlined />}>
+            <Link to="/view-non-gst-bills">View Non GST Bills</Link>
+          </Menu.Item>
           <Menu.Item key="/sales-report" icon={<TableOutlined />}>
             <Link to="/sales-report">Sales Report</Link>
           </Menu.Item>

@@ -37,7 +37,7 @@ const ViewBills = (props) => {
       title: "View",
       dataIndex: "_id",
       render: (record, test) => (
-        <a href={`/print/${record}`} target="_blank" rel="noreferrer">
+        <a href={`/print-non-gst/${record}`} target="_blank" rel="noreferrer">
           View
         </a>
       ),
@@ -67,13 +67,13 @@ const ViewBills = (props) => {
 
   const deleteBill = (id) => {
     http
-      .post(apis.DELETE_BILL, { id: id })
+      .post(apis.DELETE_NON_GST_BILL, { id: id })
       .then((res) => console.log(res))
       .finally(() => getBills());
   };
 
   const getBills = async () => {
-    let data = await httpServicesGet(apis.VIEW_BILLS);
+    let data = await httpServicesGet(apis.VIEW_NON_GST_BILLS);
     setData(data);
   };
 
@@ -84,9 +84,15 @@ const ViewBills = (props) => {
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
-        View Bills
+        View Non GST Bills
       </Typography.Title>
-      <Table columns={columns} dataSource={data.reverse()} size="small" rowKey="_id" />
+      <Table
+        columns={columns}
+        dataSource={data.reverse()}
+        size="small"
+        rowKey="_id"
+        // locale={{ emptyText: "No Bills" }}
+      />
     </>
   );
 };
