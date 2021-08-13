@@ -79,12 +79,12 @@ function Home(props) {
           <Menu.Item key="/view-non-gst-bills" icon={<TableOutlined />}>
             <Link to="/view-non-gst-bills">View Non GST Bills</Link>
           </Menu.Item>
-          <Menu.Item key="/sales-report" icon={<TableOutlined />}>
+          {/* <Menu.Item key="/sales-report" icon={<TableOutlined />}>
             <Link to="/sales-report">Sales Report</Link>
           </Menu.Item>
           <Menu.Item key="/customer-report" icon={<TableOutlined />}>
             <Link to="/customer-report">Customer Report</Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </Sider>
 
