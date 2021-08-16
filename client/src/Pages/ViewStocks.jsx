@@ -1,8 +1,14 @@
-import { Divider, Input, Table, Tag, Typography, Select } from "antd";
+import { Divider, Input, Table, Tag, Typography, Select, Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import apis from "../apis/urls";
+import { colorGenerator, company } from "../services/colorGenerator";
 import { httpServicesGet } from "../services/httpServices";
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 export const ViewStocks = (props) => {
   const { Option } = Select;
@@ -10,6 +16,7 @@ export const ViewStocks = (props) => {
   const [productName, setProductName] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [stocks, setStocks] = useState(undefined);
+  const [companyName, setCompanyName] = useState("All");
 
   const columns = [
     {
@@ -23,6 +30,15 @@ export const ViewStocks = (props) => {
       dataIndex: "productName",
       render: (Code) => <label style={{ fontWeight: "500" }}>{Code}</label>,
       key: "productName",
+    },
+    {
+      title: "Company Name",
+      dataIndex: "companyName",
+      render: (name) => (
+        <Tag color={colorGenerator(name).color} style={{ fontWeight: "600" }}>
+          {name}
+        </Tag>
+      ),
     },
     {
       title: "MRP",
@@ -56,9 +72,10 @@ export const ViewStocks = (props) => {
       title: "Total Value",
       render: (record) => (
         <Tag color="#108ee9">
-          <b>₹ {Number(record.salePrice * record.stock).toFixed(2)}</b>
+          <b>₹ {Number(record).toFixed(2)}</b>
         </Tag>
       ),
+      dataIndex: "totalValue",
       key: "GST",
     },
   ];
@@ -76,6 +93,9 @@ export const ViewStocks = (props) => {
 
   const getItems = async () => {
     let data = await httpServicesGet(apis.GET_ITEMS);
+    for (let i = 0; i < data.length; i++) {
+      data[i].totalValue = data[i].salePrice * data[i].stock;
+    }
     setData(data);
     setFilteredData(data);
   };
@@ -86,8 +106,8 @@ export const ViewStocks = (props) => {
 
   const getTotal = () => {
     let total = 0;
-    for (let i = 0; i < data.length; i++) {
-      total = total + data[i].salePrice * data[i].stock;
+    for (let i = 0; i < filteredData.length; i++) {
+      total = total + filteredData[i].salePrice * filteredData[i].stock;
     }
     return Number(total).toFixed(2);
   };
@@ -111,21 +131,37 @@ export const ViewStocks = (props) => {
     console.log(`selected ${value}`);
   }
 
+  function handleChangeCompany(value) {
+    setCompanyName(value);
+  }
+
   useEffect(() => {
     let filterData = data.filter((e) => {
       if (stocks === 100) {
         return e.stock >= 99;
       } else if (stocks === 99) {
         return e.stock >= 50 && e.stock < 100;
-      }else if (stocks === 49) {
+      } else if (stocks === 49) {
         return e.stock > 0 && e.stock < 50;
       } else {
         return e.stock <= stocks;
       }
     });
-    console.log(filterData);
+
     setFilteredData(filterData);
   }, [stocks]);
+
+  useEffect(() => {
+    let filterData = data.filter((e) => {
+      if (companyName === "All") {
+        return e;
+      } else {
+        return e.companyName === companyName;
+      }
+    });
+
+    setFilteredData(filterData);
+  }, [companyName]);
 
   return (
     <>
@@ -141,6 +177,17 @@ export const ViewStocks = (props) => {
         &emsp;
         <Select
           style={{ width: 200 }}
+          onChange={handleChangeCompany}
+          placeholder="Select Company"
+        >
+          <Option value={"All"}>All</Option>
+          {company.map((ele) => (
+            <Option value={ele.name}>{ele.name}</Option>
+          ))}
+        </Select>
+        &emsp;
+        <Select
+          style={{ width: 200 }}
           onChange={handleChange}
           placeholder="Select Stock Type"
         >
@@ -149,6 +196,14 @@ export const ViewStocks = (props) => {
           <Option value={99}>50 to 100</Option>
           <Option value={100}>Above 100</Option>
         </Select>
+        &emsp;
+        <ExcelFile element={<Button type="primary">Download</Button>}>
+          <ExcelSheet data={filteredData} name={`Stocks`}>
+            {columns.map((ele) => (
+              <ExcelColumn label={ele.title} value={ele.dataIndex} />
+            ))}
+          </ExcelSheet>
+        </ExcelFile>
       </div>
       <Divider></Divider>
 

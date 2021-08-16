@@ -1,4 +1,4 @@
-import { Form, Input, Button, Typography, InputNumber } from "antd";
+import { Form, Input, Button, Typography, InputNumber, Select } from "antd";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import http from "../apis/instance";
 import apis from "../apis/urls";
 import { loading } from "../Redux/action/loading";
+import { company } from "../services/colorGenerator";
 import customId from "../services/customId";
 
 const AddItem = (props) => {
@@ -22,14 +23,7 @@ const AddItem = (props) => {
         let product = res.data.results;
         setSKU(product.SKU);
 
-        form.setFieldsValue({
-          productName: product.productName,
-          productCode: product.productCode,
-          MRP: product.MRP,
-          salePrice: product.salePrice,
-          stock: product.stock,
-          GST: product.GST,
-        });
+        form.setFieldsValue(product);
       }
     });
   };
@@ -122,6 +116,22 @@ const AddItem = (props) => {
         ]}
       >
         <Input />
+      </Form.Item>
+      <Form.Item
+        label="Company Name"
+        name="companyName"
+        rules={[
+          {
+            required: true,
+            message: "Please input your product code!",
+          },
+        ]}
+      >
+        <Select>
+          {company.map((ele) => (
+            <Select.Option value={ele.name}>{ele.name}</Select.Option>
+          ))}
+        </Select>
       </Form.Item>
 
       <Form.Item

@@ -6,6 +6,7 @@ import apis from "../apis/urls";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { httpServicesGet } from "../services/httpServices";
+import { colorGenerator } from "../services/colorGenerator";
 
 export const ViewBills = (props) => {
   const [data, setData] = useState([]);
@@ -24,6 +25,15 @@ export const ViewBills = (props) => {
       dataIndex: "productName",
       render: (Code) => <label style={{ fontWeight: "500" }}>{Code}</label>,
       key: "productName",
+    },
+    {
+      title: "Company Name",
+      dataIndex: "companyName",
+      render: (name) => (
+        <Tag color={colorGenerator(name).color} style={{ fontWeight: "600" }}>
+          {name}
+        </Tag>
+      ),
     },
     {
       title: "MRP",
