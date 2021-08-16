@@ -5,6 +5,7 @@ import apis from "../apis/urls";
 import { colorGenerator, company } from "../services/colorGenerator";
 import { httpServicesGet } from "../services/httpServices";
 import ReactExport from "react-export-excel";
+import moment from "moment";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -197,7 +198,10 @@ export const ViewStocks = (props) => {
           <Option value={100}>Above 100</Option>
         </Select>
         &emsp;
-        <ExcelFile element={<Button type="primary">Download</Button>}>
+        <ExcelFile
+          element={<Button type="primary">Download</Button>}
+          filename={`Stocks - ${companyName} - ${moment().format("DD MMM YYYY hh-mm a")}`}
+        >
           <ExcelSheet data={filteredData} name={`Stocks`}>
             {columns.map((ele) => (
               <ExcelColumn label={ele.title} value={ele.dataIndex} />
