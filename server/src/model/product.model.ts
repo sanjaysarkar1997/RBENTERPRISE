@@ -18,6 +18,9 @@ let product = new Schema({
   MRP: {
     type: Number,
   },
+  companyName: {
+    type: String,
+  },
   salePrice: {
     type: Number,
   },
