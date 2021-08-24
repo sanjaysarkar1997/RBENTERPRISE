@@ -21,6 +21,9 @@ let bill = new Schema({
   mobileNumber: {
     type: String,
   },
+  gstNumber: {
+    type: String,
+  },
   products: {
     type: Array,
   },

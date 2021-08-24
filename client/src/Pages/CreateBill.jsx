@@ -173,6 +173,7 @@ export const CreateBill = (props) => {
 
     if (id) {
     } else {
+      
       let data = customer;
       data.dateOfBilling = dateOfBilling;
       data.billNo = customId(6);

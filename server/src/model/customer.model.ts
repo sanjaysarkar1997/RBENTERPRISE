@@ -15,6 +15,10 @@ let customer = new Schema({
   mobileNumber: {
     type: Number,
   },
+  gstNumber: {
+    type: String,
+  },
+
 });
 
 export default mongoose.model("Customer", customer);

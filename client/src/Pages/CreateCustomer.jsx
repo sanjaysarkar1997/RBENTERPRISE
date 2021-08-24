@@ -18,12 +18,7 @@ const CreateCustomer = (props) => {
     let customer = await httpServicesGet(apis.GET_CUSTOMER + "/" + id);
     console.log(customer);
     if (Object.keys(customer).length > 0) {
-      form.setFieldsValue({
-        customerName: customer.customerName,
-        Address1: customer.Address1,
-        Address2: customer.Address2,
-        mobileNumber: customer.mobileNumber,
-      });
+      form.setFieldsValue(customer);
     }
   };
 
@@ -119,6 +114,9 @@ const CreateCustomer = (props) => {
       </Form.Item>
 
       <Form.Item label="Mobile Number" name="mobileNumber">
+        <Input />
+      </Form.Item>
+      <Form.Item label="GST Number" name="gstNumber">
         <Input />
       </Form.Item>
 

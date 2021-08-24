@@ -68,6 +68,9 @@ export default function Print() {
                 <div>
                   <b>{printDetails?.mobileNumber}</b>
                 </div>
+                <div>
+                 GST NO: <b>{printDetails?.gstNumber}</b>
+                </div>
               </div>
               <div>
                 <h6 className="mb-3" style={{ textAlign: "right" }}>
