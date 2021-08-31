@@ -29,6 +29,7 @@ export const CreateBill = (props) => {
   const [dateOfBilling, setDateOfBilling] = useState(moment());
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({});
+  const [salePriceEdit, setSalePriceEdit] = useState(0);
 
   const history = useHistory();
 
@@ -125,7 +126,10 @@ export const CreateBill = (props) => {
 
   function handleChange(value) {
     let product = products.find((ele) => ele.productCode === value);
-    setProduct(product);
+    if (product) {
+      setProduct(product);
+      setSalePriceEdit(product.salePrice);
+    }
   }
 
   function handleCustomer(value) {
@@ -141,8 +145,8 @@ export const CreateBill = (props) => {
       particular: product.productCode,
       mrp: product.MRP,
       quantity: quantity,
-      rate: product.salePrice,
-      total: Number((Number(product.salePrice) * Number(quantity)).toFixed(3)),
+      rate: salePriceEdit,
+      total: Number((Number(salePriceEdit) * Number(quantity)).toFixed(3)),
       productId: product._id,
       gst: product.GST,
     };
@@ -173,7 +177,6 @@ export const CreateBill = (props) => {
 
     if (id) {
     } else {
-      
       let data = customer;
       data.dateOfBilling = dateOfBilling;
       data.billNo = customId(6);
@@ -348,20 +351,21 @@ export const CreateBill = (props) => {
                 </h3>
               </td>
               <td>
-                <h3 style={{ margin: "0 5px" }}>
+                {/* <h3 style={{ margin: "0 5px" }}>
                   {product?.salePrice ? product.salePrice : 0}
-                </h3>
+                </h3> */}
+                <InputNumber
+                  min={1}
+                  onChange={(e) => setSalePriceEdit(e)}
+                  value={salePriceEdit}
+                />
               </td>
               <td>
                 <h3 style={{ margin: "0 5px" }}>
                   {" "}
-                  {Number(
-                    (Number(product.salePrice) * Number(quantity)).toFixed(3)
-                  )
+                  {Number((Number(salePriceEdit) * Number(quantity)).toFixed(3))
                     ? Number(
-                        (Number(product.salePrice) * Number(quantity)).toFixed(
-                          3
-                        )
+                        (Number(salePriceEdit) * Number(quantity)).toFixed(3)
                       )
                     : 0}
                 </h3>
