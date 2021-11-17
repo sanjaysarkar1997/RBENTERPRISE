@@ -186,6 +186,19 @@ const AddItem = (props) => {
       </Form.Item>
 
       <Form.Item
+        label="Discount"
+        name="discount"
+        rules={[
+          {
+            required: true,
+            message: "Please input your Discount!",
+          },
+        ]}
+      >
+        <InputNumber />
+      </Form.Item>
+
+      <Form.Item
         wrapperCol={{
           offset: 11,
           span: 16,

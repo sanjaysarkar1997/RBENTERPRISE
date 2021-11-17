@@ -93,8 +93,9 @@ export default function Print() {
                     <th>Particular</th>
                     <th className="right">MRP</th>
                     <th className="center">Qty</th>
-                    <th>Rate</th>
+                    <th className="right">Discount</th>
                     <th>GST</th>
+                    <th>Rate</th>
                     <th className="right">Total</th>
                   </tr>
                 </thead>
@@ -117,10 +118,13 @@ export default function Print() {
                         {ele.quantity}
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele.rate}
+                        {ele?.discount} %
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
                         {ele?.gst} %
+                      </td>
+                      <td style={{ padding: "2px 3px" }} className="right">
+                        ₹ {ele.rate}
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
                         ₹{" "}

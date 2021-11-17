@@ -21,6 +21,9 @@ let product = new Schema({
   companyName: {
     type: String,
   },
+  discount: {
+    type: Number,
+  },
   salePrice: {
     type: Number,
   },

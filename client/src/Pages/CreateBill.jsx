@@ -98,15 +98,21 @@ export const CreateBill = (props) => {
       key: "quantity",
     },
     {
-      title: "Rate",
-      dataIndex: "rate",
-      key: "rate",
+      title: "Discount",
+      dataIndex: "discount",
+      render: (discount) => <label>{discount}%</label>,
+      key: "discount",
     },
     {
       title: "GST",
       dataIndex: "gst",
       render: (gst) => <label>{gst}%</label>,
       key: "gst",
+    },
+    {
+      title: "Rate",
+      dataIndex: "rate",
+      key: "rate",
     },
     {
       title: "Total Amount",
@@ -149,6 +155,7 @@ export const CreateBill = (props) => {
       total: Number((Number(salePriceEdit) * Number(quantity)).toFixed(3)),
       productId: product._id,
       gst: product.GST,
+      discount: product.discount,
     };
 
     data.push(obj);
