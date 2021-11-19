@@ -31,7 +31,7 @@ function Home(props) {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed} width={250}>
+      <Sider trigger={null} collapsible collapsed={collapsed} width={180}>
         <div
           className="logo"
           style={{

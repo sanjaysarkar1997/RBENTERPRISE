@@ -30,6 +30,21 @@ let product = new Schema({
   stock: {
     type: Number,
   },
+  hsnCode: {
+    type: String,
+  },
+  cGST: {
+    type: Number,
+  },
+  sGST: {
+    type: Number,
+  },
+  netPrice: {
+    type: Number,
+  },
+  distributorCommission: {
+    type: Number,
+  },
 });
 
 export default mongoose.model("Product", product);
