@@ -98,10 +98,20 @@ export const CreateBill = (props) => {
       key: "quantity",
     },
     {
+      title: "Sale Price",
+      dataIndex: "salePrice",
+      key: "salePrice",
+    },
+    {
       title: "Discount",
       dataIndex: "discount",
       render: (discount) => <label>{discount}%</label>,
       key: "discount",
+    },
+    {
+      title: "Net Price",
+      dataIndex: "netPrice",
+      key: "netRate",
     },
     {
       title: "GST",
@@ -109,11 +119,7 @@ export const CreateBill = (props) => {
       render: (gst) => <label>{gst}%</label>,
       key: "gst",
     },
-    {
-      title: "Rate",
-      dataIndex: "rate",
-      key: "rate",
-    },
+
     {
       title: "Total Amount",
       dataIndex: "total",
@@ -151,11 +157,18 @@ export const CreateBill = (props) => {
       particular: product.productCode,
       mrp: product.MRP,
       quantity: quantity,
-      rate: salePriceEdit,
-      total: Number((Number(salePriceEdit) * Number(quantity)).toFixed(3)),
+      salePrice: product.salePrice,
+      netPrice: product.netPrice,
+      total: Number((Number(product.netPrice) * Number(quantity)).toFixed(3)),
       productId: product._id,
       gst: product.GST,
       discount: product.discount,
+      hsnCode: product.hsnCode,
+      comment: product.comment,
+      cGST: product.cGST,
+      sGST: product.sGST,
+      companyName: product.companyName,
+      distributorCommission: product.distributorCommission,
     };
 
     data.push(obj);
@@ -318,6 +331,7 @@ export const CreateBill = (props) => {
               <td>Quantity</td>
               <td>MRP</td>
               <td>SP</td>
+              <td>NP</td>
               <td>Total</td>
             </tr>
           </thead>
@@ -358,21 +372,23 @@ export const CreateBill = (props) => {
                 </h3>
               </td>
               <td>
-                {/* <h3 style={{ margin: "0 5px" }}>
+                <h3 style={{ margin: "0 5px" }}>
                   {product?.salePrice ? product.salePrice : 0}
-                </h3> */}
-                <InputNumber
-                  min={1}
-                  onChange={(e) => setSalePriceEdit(e)}
-                  value={salePriceEdit}
-                />
+                </h3>
+              </td>
+              <td>
+                <h3 style={{ margin: "0 5px" }}>
+                  {product?.netPrice ? product.netPrice : 0}
+                </h3>
               </td>
               <td>
                 <h3 style={{ margin: "0 5px" }}>
                   {" "}
-                  {Number((Number(salePriceEdit) * Number(quantity)).toFixed(3))
+                  {Number(
+                    (Number(product.netPrice) * Number(quantity)).toFixed(3)
+                  )
                     ? Number(
-                        (Number(salePriceEdit) * Number(quantity)).toFixed(3)
+                        (Number(product.netPrice) * Number(quantity)).toFixed(3)
                       )
                     : 0}
                 </h3>

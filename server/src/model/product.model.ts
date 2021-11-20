@@ -45,6 +45,12 @@ let product = new Schema({
   distributorCommission: {
     type: Number,
   },
+  retailCommission: {
+    type: Number,
+  },
+  comment: {
+    type: String,
+  },
 });
 
 export default mongoose.model("Product", product);

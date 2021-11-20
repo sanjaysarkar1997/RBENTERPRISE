@@ -46,7 +46,9 @@ export default function Print() {
           <div className="card-body">
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div>
-                <h6 className="mb-2">From:</h6>
+                <h6 className="mb-2" style={{ fontSize: "14px" }}>
+                  From:
+                </h6>
                 <div>
                   <strong>R B ENTERPRISE</strong>
                 </div>
@@ -59,7 +61,9 @@ export default function Print() {
               </div>
 
               <div>
-                <h6 className="mb-2">To:</h6>
+                <h6 className="mb-2" style={{ fontSize: "14px" }}>
+                  To:
+                </h6>
                 <div>
                   <strong>{printDetails?.customerName}</strong>
                 </div>
@@ -91,11 +95,14 @@ export default function Print() {
                   <tr>
                     <th className="center">#</th>
                     <th>Particular</th>
+                    <th>HSN Code</th>
                     <th className="right">MRP</th>
                     <th className="center">Qty</th>
-                    <th className="right">Discount</th>
-                    <th>GST</th>
-                    <th>Rate</th>
+                    <th>Sale Price</th>
+                    <th className="right">Dis.(%)</th>
+                    <th>SGST</th>
+                    <th>CGST</th>
+                    <th>Net Price</th>
                     <th className="right">Total</th>
                   </tr>
                 </thead>
@@ -112,25 +119,31 @@ export default function Print() {
                         {ele.particular}
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
+                        {ele.hsnCode}
+                      </td>
+                      <td style={{ padding: "2px 3px" }} className="right">
                         ₹ {ele.mrp}
                       </td>
                       <td style={{ padding: "2px 3px" }} className="center">
                         {ele.quantity}
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
+                        ₹ {ele.salePrice}
+                      </td>
+                      <td style={{ padding: "2px 3px" }} className="right">
                         {ele?.discount} %
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
-                        {ele?.gst} %
+                        {ele?.sGST} %
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele.rate}
+                        {ele?.cGST} %
                       </td>
                       <td style={{ padding: "2px 3px" }} className="right">
-                        ₹{" "}
-                        {Number(
-                          (Number(ele.rate) * Number(ele.quantity)).toFixed(3)
-                        )}
+                        ₹ {ele?.netPrice}
+                      </td>
+                      <td style={{ padding: "2px 3px" }} className="right">
+                        ₹ {ele.total}
                       </td>
                     </tr>
                   ))}

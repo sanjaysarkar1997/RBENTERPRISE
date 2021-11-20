@@ -10,7 +10,6 @@ import {
 import Routes from "./Routes";
 import { Link } from "react-router-dom";
 
-
 function Home(props) {
   const { Header, Sider, Content } = Layout;
 

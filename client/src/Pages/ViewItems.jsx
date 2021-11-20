@@ -48,16 +48,24 @@ export const ViewBills = (props) => {
       key: "GST",
     },
     {
-      title: "Discount",
-      dataIndex: "discount",
-      render: (discount) => <label style={{ fontWeight: "800" }}>{discount}%</label>,
-      key: "discount",
-    },
-    {
       title: "Sale Price",
       dataIndex: "salePrice",
       render: (SP) => <label style={{ fontWeight: "800" }}>{SP}</label>,
       key: "salePrice",
+    },
+    {
+      title: "Discount",
+      dataIndex: "discount",
+      render: (discount) => (
+        <label style={{ fontWeight: "800" }}>{discount}%</label>
+      ),
+      key: "discount",
+    },
+    {
+      title: "Net Price",
+      dataIndex: "netPrice",
+      render: (NP) => <label style={{ fontWeight: "800" }}>{NP}</label>,
+      key: "netPrice",
     },
     {
       title: "Stock",

@@ -48,16 +48,22 @@ export const ViewStocks = (props) => {
       key: "productName",
     },
     {
+      title: "Sale Price",
+      dataIndex: "salePrice",
+      render: (SP) => <label style={{ fontWeight: "800" }}> {SP}</label>,
+      key: "salePrice",
+    },
+    {
       title: "GST",
       dataIndex: "GST",
       render: (GST) => <label style={{ fontWeight: "800" }}>{GST}%</label>,
       key: "GST",
     },
     {
-      title: "Sale Price",
-      dataIndex: "salePrice",
-      render: (SP) => <label style={{ fontWeight: "800" }}> {SP}</label>,
-      key: "salePrice",
+      title: "Net Price",
+      dataIndex: "netPrice",
+      render: (NP) => <label style={{ fontWeight: "800" }}>{NP}</label>,
+      key: "netPrice",
     },
     {
       title: "STOCK",

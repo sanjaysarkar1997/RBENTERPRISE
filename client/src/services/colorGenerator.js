@@ -1,7 +1,7 @@
 let company = [
   { name: "Unicharm", color: "#673AB7" },
   { name: "Asian Paints", color: "#2196F3" },
-  { name: "Little Angel", color: "#9f1cbb" },
+  { name: "Little Angel", color: "#4caf50" },
 ];
 
 const colorGenerator = (value) => {
