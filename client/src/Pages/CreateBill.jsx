@@ -29,7 +29,6 @@ export const CreateBill = (props) => {
   const [dateOfBilling, setDateOfBilling] = useState(moment());
   const [customers, setCustomers] = useState([]);
   const [customer, setCustomer] = useState({});
-  const [salePriceEdit, setSalePriceEdit] = useState(0);
 
   const history = useHistory();
 
@@ -140,9 +139,16 @@ export const CreateBill = (props) => {
     let product = products.find((ele) => ele.productCode === value);
     if (product) {
       setProduct(product);
-      setSalePriceEdit(product.salePrice);
     }
   }
+
+  const newDiscount = (e) => {
+    let netPrice = Number(
+      (product.salePrice - (product.salePrice / 100) * e).toFixed(2)
+    );
+    let discount = e;
+    setProduct({ ...product, netPrice, discount });
+  };
 
   function handleCustomer(value) {
     let customer = customers.find((ele) => ele.customerName === value);
@@ -229,7 +235,6 @@ export const CreateBill = (props) => {
       <Typography.Title style={{ textAlign: "center" }} level={3}>
         {id ? "Update" : "Create"} Bill
       </Typography.Title>
-      {console.log(customer)}
       <div style={{ display: "flex" }}>
         <Select
           placeholder="Select Customer"
@@ -313,7 +318,7 @@ export const CreateBill = (props) => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={700}
+        width={800}
         destroyOnClose
         footer={[
           <Button key="back" onClick={handleCancel}>
@@ -331,6 +336,7 @@ export const CreateBill = (props) => {
               <td>Quantity</td>
               <td>MRP</td>
               <td>SP</td>
+              <td>Discount</td>
               <td>NP</td>
               <td>Total</td>
             </tr>
@@ -367,22 +373,32 @@ export const CreateBill = (props) => {
                 />
               </td>
               <td>
-                <h3 style={{ margin: "0 5px" }}>
+                <h5 style={{ margin: "0 5px" }}>
                   {product?.MRP ? product.MRP : 0}
-                </h3>
+                </h5>
               </td>
               <td>
-                <h3 style={{ margin: "0 5px" }}>
+                <h6 style={{ margin: "0 5px" }}>
                   {product?.salePrice ? product.salePrice : 0}
-                </h3>
+                </h6>
               </td>
               <td>
-                <h3 style={{ margin: "0 5px" }}>
+                <h6 style={{ margin: "0 5px" }}>
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    value={product.discount}
+                    onChange={(e) => newDiscount(e)}
+                  />
+                </h6>
+              </td>
+              <td>
+                <h6 style={{ margin: "0 5px" }}>
                   {product?.netPrice ? product.netPrice : 0}
-                </h3>
+                </h6>
               </td>
               <td>
-                <h3 style={{ margin: "0 5px" }}>
+                <h6 style={{ margin: "0 5px" }}>
                   {" "}
                   {Number(
                     (Number(product.netPrice) * Number(quantity)).toFixed(3)
@@ -391,7 +407,7 @@ export const CreateBill = (props) => {
                         (Number(product.netPrice) * Number(quantity)).toFixed(3)
                       )
                     : 0}
-                </h3>
+                </h6>
               </td>
             </tr>
           </tbody>

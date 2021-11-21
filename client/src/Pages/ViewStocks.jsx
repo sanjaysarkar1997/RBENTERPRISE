@@ -101,7 +101,11 @@ export const ViewStocks = (props) => {
   const getItems = async () => {
     let data = await httpServicesGet(apis.GET_ITEMS);
     for (let i = 0; i < data.length; i++) {
-      data[i].totalValue = data[i].salePrice * data[i].stock;
+      if (data[i]?.netPrice) {
+        data[i].totalValue = data[i]?.netPrice * data[i].stock;
+      } else {
+        data[i].totalValue = data[i]?.salePrice * data[i].stock;
+      }
     }
     setData(data);
     setFilteredData(data);
@@ -114,7 +118,7 @@ export const ViewStocks = (props) => {
   const getTotal = () => {
     let total = 0;
     for (let i = 0; i < filteredData.length; i++) {
-      total = total + filteredData[i].salePrice * filteredData[i].stock;
+      total = total + filteredData[i].totalValue;
     }
     return Number(total).toFixed(2);
   };
@@ -135,7 +139,6 @@ export const ViewStocks = (props) => {
 
   function handleChange(value) {
     setStocks(value);
-    console.log(`selected ${value}`);
   }
 
   function handleChangeCompany(value) {
@@ -187,9 +190,13 @@ export const ViewStocks = (props) => {
           onChange={handleChangeCompany}
           placeholder="Select Company"
         >
-          <Option value={"All"}>All</Option>
+          <Option key="All" value={"All"}>
+            All
+          </Option>
           {company.map((ele) => (
-            <Option value={ele.name}>{ele.name}</Option>
+            <Option key={ele.name} value={ele.name}>
+              {ele.name}
+            </Option>
           ))}
         </Select>
         &emsp;
@@ -206,11 +213,17 @@ export const ViewStocks = (props) => {
         &emsp;
         <ExcelFile
           element={<Button type="primary">Download</Button>}
-          filename={`Stocks - ${companyName} - ${moment().format("DD MMM YYYY hh-mm a")}`}
+          filename={`Stocks - ${companyName} - ${moment().format(
+            "DD MMM YYYY hh-mm a"
+          )}`}
         >
           <ExcelSheet data={filteredData} name={`Stocks`}>
             {columns.map((ele) => (
-              <ExcelColumn label={ele.title} value={ele.dataIndex} />
+              <ExcelColumn
+                key={ele.title}
+                label={ele.title}
+                value={ele.dataIndex}
+              />
             ))}
           </ExcelSheet>
         </ExcelFile>
