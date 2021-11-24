@@ -97,7 +97,7 @@ export const CreateBill = (props) => {
       key: "quantity",
     },
     {
-      title: "Sale Price",
+      title: "Rate",
       dataIndex: "salePrice",
       key: "salePrice",
     },
@@ -108,19 +108,18 @@ export const CreateBill = (props) => {
       key: "discount",
     },
     {
-      title: "Net Price",
-      dataIndex: "netPrice",
-      key: "netRate",
-    },
-    {
       title: "GST",
       dataIndex: "gst",
       render: (gst) => <label>{gst}%</label>,
       key: "gst",
     },
-
     {
-      title: "Total Amount",
+      title: "Net Amount",
+      dataIndex: "netPrice",
+      key: "netRate",
+    },
+    {
+      title: "Total Net Amount",
       dataIndex: "total",
       key: "total",
     },
@@ -161,11 +160,12 @@ export const CreateBill = (props) => {
 
     let obj = {
       particular: product.productCode,
+      desc: product.productName,
       mrp: product.MRP,
       quantity: quantity,
       salePrice: product.salePrice,
       netPrice: product.netPrice,
-      total: Number((Number(product.netPrice) * Number(quantity)).toFixed(3)),
+      total: Number((Number(product.netPrice) * Number(quantity)).toFixed(2)),
       productId: product._id,
       gst: product.GST,
       discount: product.discount,
@@ -176,6 +176,8 @@ export const CreateBill = (props) => {
       companyName: product.companyName,
       distributorCommission: product.distributorCommission,
     };
+
+    console.log(obj);
 
     data.push(obj);
     setDataSource(data);
@@ -318,7 +320,7 @@ export const CreateBill = (props) => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={800}
+        width={850}
         destroyOnClose
         footer={[
           <Button key="back" onClick={handleCancel}>
@@ -335,10 +337,10 @@ export const CreateBill = (props) => {
               <td>Select Product</td>
               <td>Quantity</td>
               <td>MRP</td>
-              <td>SP</td>
+              <td>Rate</td>
               <td>Discount</td>
-              <td>NP</td>
-              <td>Total</td>
+              <td>Amount</td>
+              <td>Net Amount</td>
             </tr>
           </thead>
           <tbody>
@@ -379,7 +381,9 @@ export const CreateBill = (props) => {
               </td>
               <td>
                 <h6 style={{ margin: "0 5px" }}>
-                  {product?.salePrice ? product.salePrice : 0}
+                  {product?.salePrice
+                    ? Number(product.salePrice.toFixed(2))
+                    : 0}
                 </h6>
               </td>
               <td>
@@ -394,17 +398,17 @@ export const CreateBill = (props) => {
               </td>
               <td>
                 <h6 style={{ margin: "0 5px" }}>
-                  {product?.netPrice ? product.netPrice : 0}
+                  {product?.netPrice ? Number(product.netPrice.toFixed(2)) : 0}
                 </h6>
               </td>
               <td>
                 <h6 style={{ margin: "0 5px" }}>
                   {" "}
                   {Number(
-                    (Number(product.netPrice) * Number(quantity)).toFixed(3)
+                    (Number(product.netPrice) * Number(quantity)).toFixed(2)
                   )
                     ? Number(
-                        (Number(product.netPrice) * Number(quantity)).toFixed(3)
+                        (Number(product.netPrice) * Number(quantity)).toFixed(2)
                       )
                     : 0}
                 </h6>

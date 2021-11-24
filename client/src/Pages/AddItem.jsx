@@ -47,14 +47,17 @@ const AddItem = (props) => {
   }, [id]);
 
   const salePriceUpdate = (e) => {
+    let MRP = form.getFieldValue("MRP");
+    let gst = form.getFieldValue("GST");
+    gst = 1 + gst / 100;
     if (companyName === "Little Angel") {
-      let MRP = form.getFieldValue("MRP");
       let disCom = form.getFieldValue("distributorCommission");
-      let salePrice = Number((MRP / disCom / e).toFixed(2));
+      let rate = MRP / disCom / gst / e;
+
+      let salePrice = Number(rate.toFixed(3));
       form.setFieldsValue({ salePrice: salePrice });
     } else {
-      let MRP = form.getFieldValue("MRP");
-      let salePrice = Number((MRP / e).toFixed(2));
+      let salePrice = Number((MRP / gst / e).toFixed(3));
       form.setFieldsValue({ salePrice: salePrice });
     }
   };
@@ -63,7 +66,6 @@ const AddItem = (props) => {
     let MRP = form.getFieldValue("MRP");
     let salePrice = 0;
 
-    console.log(form.getFieldValue("companyName"));
     let disCom = form.getFieldValue("distributorCommission");
     let retailCom = form.getFieldValue("retailCommission");
     if (companyName === "Little Angel") {
@@ -72,7 +74,7 @@ const AddItem = (props) => {
       salePrice = MRP / disCom;
     }
 
-    let netPrice = Number((salePrice - (salePrice / 100) * e).toFixed(2));
+    let netPrice = Number((salePrice - (salePrice / 100) * e).toFixed(3));
     form.setFieldsValue({ netPrice: netPrice });
   };
 
@@ -188,6 +190,52 @@ const AddItem = (props) => {
             </Select>
           </Form.Item>
         </Col>
+        <Col span="8">
+          <Form.Item
+            label="GST (%)"
+            name="GST"
+            rules={[
+              {
+                required: true,
+                message: "Please input your GST!",
+              },
+            ]}
+          >
+            <InputNumber
+              style={{ width: "100%" }}
+              onChange={(e) => gstUpdate(e)}
+            />
+          </Form.Item>
+        </Col>
+        <Col span="8">
+          <Form.Item
+            label="SGST (%)"
+            name="sGST"
+            rules={[
+              {
+                required: true,
+                message: "Please input your GST!",
+              },
+            ]}
+          >
+            <InputNumber style={{ width: "100%" }} />
+          </Form.Item>
+        </Col>
+        <Col span="8">
+          <Form.Item
+            label="CGST (%)"
+            name="cGST"
+            rules={[
+              {
+                required: true,
+                message: "Please input your GST!",
+              },
+            ]}
+          >
+            <InputNumber style={{ width: "100%" }} />
+          </Form.Item>
+        </Col>
+
         <Col span="6">
           <Form.Item
             label="MRP"
@@ -273,7 +321,7 @@ const AddItem = (props) => {
         </Col>
         <Col span="8">
           <Form.Item
-            label="Sale Price"
+            label="Rate"
             name="salePrice"
             rules={[
               {
@@ -293,51 +341,6 @@ const AddItem = (props) => {
               {
                 required: true,
                 message: "Please input your Net Price!",
-              },
-            ]}
-          >
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-        </Col>
-        <Col span="8">
-          <Form.Item
-            label="GST (%)"
-            name="GST"
-            rules={[
-              {
-                required: true,
-                message: "Please input your GST!",
-              },
-            ]}
-          >
-            <InputNumber
-              style={{ width: "100%" }}
-              onChange={(e) => gstUpdate(e)}
-            />
-          </Form.Item>
-        </Col>
-        <Col span="8">
-          <Form.Item
-            label="SGST (%)"
-            name="sGST"
-            rules={[
-              {
-                required: true,
-                message: "Please input your GST!",
-              },
-            ]}
-          >
-            <InputNumber style={{ width: "100%" }} />
-          </Form.Item>
-        </Col>
-        <Col span="8">
-          <Form.Item
-            label="CGST (%)"
-            name="cGST"
-            rules={[
-              {
-                required: true,
-                message: "Please input your GST!",
               },
             ]}
           >

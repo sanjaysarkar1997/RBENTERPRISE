@@ -24,11 +24,46 @@ export default function Print() {
     for (let i = 0; i < printDetails?.products?.length; i++) {
       total = total + printDetails?.products[i].total;
     }
+    return Number(Number(total).toFixed(2));
+  };
+
+  const getTotalAmount = () => {
+    let total = 0;
+    for (let i = 0; i < printDetails?.products?.length; i++) {
+      total =
+        total +
+        getTotalValue(
+          printDetails?.products[i].salePrice,
+          printDetails?.products[i].quantity
+        );
+    }
     return Number(total).toFixed(2);
   };
 
+  const getTotalValue = (value, qty) => {
+    value = Number(value);
+    qty = Number(qty);
+    return Number(Number(value * qty).toFixed(2));
+  };
+
+  const getGSTValue = () => {
+    let gstTotal = 0;
+    for (let i = 0; i < printDetails?.products?.length; i++) {
+      if (printDetails?.products[i].gst) {
+        gstTotal =
+          gstTotal +
+          getTotalValue(
+            printDetails?.products[i].salePrice,
+            printDetails?.products[i].quantity
+          ) *
+            (printDetails?.products[i].gst / 100);
+      }
+    }
+    return Number(Number(gstTotal / 2).toFixed(2));
+  };
+
   return (
-    <div className="container-fluid">
+    <div className="container-fluid print">
       <div style={{ display: "flex" }}>
         <div className="card" style={{ width: "100%" }}>
           <div
@@ -94,56 +129,53 @@ export default function Print() {
                 <thead>
                   <tr>
                     <th className="center">#</th>
-                    <th>Particular</th>
-                    <th>HSN Code</th>
+                    <th style={{ minWidth: "200px" }}>Particular</th>
                     <th className="right">MRP</th>
-                    <th className="center">Qty</th>
-                    <th>Sale Price</th>
-                    <th className="right">Dis.(%)</th>
-                    <th>SGST</th>
-                    <th>CGST</th>
-                    <th>Net Price</th>
-                    <th className="right">Total</th>
+                    <th>HSN Code</th>
+                    <th className="center" style={{ maxWidth: "40px" }}>
+                      Qty.(pcs)
+                    </th>
+                    <th className="right" style={{ maxWidth: "40px" }}>
+                      Disc. (%)
+                    </th>
+                    <th style={{ maxWidth: "40px" }}>GST (%)</th>
+                    <th>Amount</th>
+                    <th>Net. Amt. </th>
+                    {/* <th className="right">Total</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {printDetails?.products?.map((ele, i) => (
                     <tr key={i}>
-                      <td style={{ padding: "2px 3px" }} className="center">
+                      <td style={{ padding: "1px 4px" }} className="center">
                         {i + 1}
                       </td>
                       <td
-                        style={{ padding: "2px 3px" }}
+                        style={{ padding: "1px 4px" }}
                         className="left strong"
                       >
-                        {ele.particular}
+                        {ele.particular} - {ele.desc}
                       </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
+                      <td style={{ padding: "1px 4px" }} className="right">
+                        {ele.mrp}
+                      </td>
+                      <td style={{ padding: "1px 4px" }} className="right">
                         {ele.hsnCode}
                       </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele.mrp}
-                      </td>
-                      <td style={{ padding: "2px 3px" }} className="center">
+                      <td style={{ padding: "1px 4px" }} className="center">
                         {ele.quantity}
                       </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele.salePrice}
-                      </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
+                      <td style={{ padding: "1px 4px" }} className="right">
                         {ele?.discount} %
                       </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
-                        {ele?.sGST} %
+                      <td style={{ padding: "1px 4px" }} className="right">
+                        {ele?.gst} %
                       </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
-                        {ele?.cGST} %
+                      <td style={{ padding: "1px 4px" }} className="right">
+                        {getTotalValue(ele.salePrice, ele.quantity)}
                       </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele?.netPrice}
-                      </td>
-                      <td style={{ padding: "2px 3px" }} className="right">
-                        ₹ {ele.total}
+                      <td style={{ padding: "1px 4px" }} className="right">
+                        {getTotalValue(ele?.netPrice, ele.quantity)}
                       </td>
                     </tr>
                   ))}
@@ -154,12 +186,19 @@ export default function Print() {
               <div>
                 <table className="table table-clear">
                   <tbody>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                     <tr>
-                      <td className="left">
-                        <strong>Grand Total:</strong>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong>Total:</strong>
                       </td>
-                      <td className="right">
-                        {toWords.convert(getTotal(), { currency: true })}
+                      <td className="right" style={{ padding: "2px 6px" }}>
+                        {toWords.convert(getTotal().toFixed(0), {
+                          currency: true,
+                        })}
                       </td>
                     </tr>
                   </tbody>
@@ -169,12 +208,53 @@ export default function Print() {
                 <table className="table table-clear">
                   <tbody>
                     <tr>
+                      <td className="left"></td>
                       <td className="left">
-                        <strong>Grand Total:</strong>
+                        {/* <strong>{getTotalAmount()}</strong> */}
                       </td>
-                      <td className="right">
-                        <strong>₹ {getTotal()}</strong>
+                      <td className="left">
+                        {/* <strong>{getTotal()}</strong> */}
                       </td>
+                    </tr>
+                    <tr>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong>CGST</strong>
+                      </td>
+                      <td className="right" style={{ padding: "2px 6px" }}>
+                        <strong>{getGSTValue()}</strong>
+                      </td>
+                      <td className="right"></td>
+                    </tr>
+                    <tr>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong>SGST</strong>
+                      </td>
+                      <td className="right" style={{ padding: "2px 6px" }}>
+                        <strong> {getGSTValue()}</strong>
+                      </td>
+                      <td className="right"></td>
+                    </tr>
+                    <tr>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong>Round Off</strong>
+                      </td>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong>
+                          {" "}
+                          {Number(getTotal().toFixed(0) - getTotal()).toFixed(
+                            2
+                          )}
+                        </strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong>Total</strong>
+                      </td>
+                      <td className="left" style={{ padding: "2px 6px" }}>
+                        <strong> {Number(getTotal().toFixed(0))}</strong>
+                      </td>
+                      <td className="right"></td>
                     </tr>
                   </tbody>
                 </table>
