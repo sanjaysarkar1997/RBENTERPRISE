@@ -49,6 +49,7 @@ export default function Print() {
           printDetails?.products[i].discount
         );
     }
+    total = total.toFixed(2);
     return Number(total);
   };
 
