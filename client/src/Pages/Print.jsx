@@ -21,10 +21,19 @@ export default function Print() {
 
   const getTotal = () => {
     let total = 0;
-    for (let i = 0; i < printDetails?.products?.length; i++) {
-      total = total + printDetails?.products[i].total;
+    let data = printDetails?.products;
+    for (let i = 0; i < data?.length; i++) {
+      total =
+        total +
+        getNetAmount(
+          getAmount(
+            getTotalValue(data[i].salePrice.toFixed(2), data[i].quantity),
+            data[i]?.discount
+          ),
+          data[i].gst
+        );
     }
-    return Number(Number(total).toFixed(2));
+    return Number(Number(total));
   };
 
   const getTotalAmount = () => {
@@ -34,30 +43,30 @@ export default function Print() {
         total +
         getAmount(
           getTotalValue(
-            printDetails?.products[i].salePrice,
+            printDetails?.products[i].salePrice.toFixed(2),
             printDetails?.products[i].quantity
           ),
           printDetails?.products[i].discount
         );
     }
-    return Number(total).toFixed(2);
+    return Number(total);
   };
 
   const getTotalValue = (value, qty) => {
     value = Number(value);
     qty = Number(qty);
-    return Number(Number(value * qty).toFixed(2));
+    return Number(Number(value * qty));
   };
 
   const getGSTValue = () => {
     let gstTotal = 0;
     for (let i = 0; i < printDetails?.products?.length; i++) {
-      if (printDetails?.products[i].gst) {
+      if (printDetails?.products[i].gst > 0) {
         gstTotal =
           gstTotal +
           getAmount(
             getTotalValue(
-              printDetails?.products[i].salePrice,
+              printDetails?.products[i].salePrice.toFixed(2),
               printDetails?.products[i].quantity
             ),
             printDetails?.products[i].discount
@@ -65,13 +74,26 @@ export default function Print() {
             (printDetails?.products[i].gst / 100);
       }
     }
-    return Number(Number(gstTotal / 2).toFixed(2));
+    gstTotal = (gstTotal / 2).toFixed(2);
+    return Number(gstTotal);
   };
 
   const getAmount = (total, discount) => {
     let amount = 0;
+    total = Number(total);
+    discount = Number(discount);
     amount = total - (total * discount) / 100;
-    return Number(amount.toFixed(2));
+    amount = amount.toFixed(2);
+    return Number(amount);
+  };
+
+  const getNetAmount = (total, gst) => {
+    let amount = 0;
+    total = Number(total);
+    gst = Number(gst);
+    amount = total + (total * gst) / 100;
+    amount = amount.toFixed(2);
+    return Number(amount);
   };
 
   return (
@@ -136,7 +158,7 @@ export default function Print() {
             </div>
             <br />
 
-            <div className="table-responsive-sm">
+            <div className="table-responsive-sm" style={{ minHeight: "40vh" }}>
               <table className="table table-bordered table-sm">
                 <thead>
                   <tr>
@@ -149,8 +171,8 @@ export default function Print() {
 
                     <th className="right">Disc. (%)</th>
                     <th>GST (%)</th>
-                    <th>Amount</th>
-                    <th>Net. Amt. </th>
+                    <th style={{ minWidth: "60px" }}>Amount</th>
+                    <th style={{ minWidth: "60px" }}>Net. Amt. </th>
                     {/* <th className="right">Total</th> */}
                   </tr>
                 </thead>
@@ -186,12 +208,21 @@ export default function Print() {
                       </td>
                       <td style={{ padding: "1px 4px" }} className="right">
                         {getAmount(
-                          getTotalValue(ele.salePrice, ele.quantity),
+                          getTotalValue(ele.salePrice.toFixed(2), ele.quantity),
                           ele?.discount
                         )}
                       </td>
                       <td style={{ padding: "1px 4px" }} className="right">
-                        {getTotalValue(ele?.netPrice, ele.quantity)}
+                        {getNetAmount(
+                          getAmount(
+                            getTotalValue(
+                              ele.salePrice.toFixed(2),
+                              ele.quantity
+                            ),
+                            ele?.discount
+                          ),
+                          ele.gst
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -204,54 +235,44 @@ export default function Print() {
                 <table className="table table-clear">
                   <tbody>
                     <tr>
-                      <td className="left"></td>
-                      <td className="left">
-                        <strong>{getTotalAmount()}</strong>
+                      <td></td>
+                      <td className="left" style={{ minWidth: "70px" }}>
+                        {getTotalAmount()}
                       </td>
-                      <td className="left"></td>
-                      <td className="left"></td>
-                      <td className="left">
-                        <strong>{getTotal()}</strong>
+                      <td className="left" style={{ minWidth: "70px" }}>
+                        {getTotal()}
                       </td>
                     </tr>
                     <tr>
                       <td className="left" style={{ padding: "2px 6px" }}>
-                        <strong>CGST</strong>
+                        CGST
                       </td>
                       <td className="right" style={{ padding: "2px 6px" }}>
-                        <strong>{getGSTValue()}</strong>
+                        {getGSTValue()}
                       </td>
-                      <td className="right"></td>
                     </tr>
                     <tr>
                       <td className="left" style={{ padding: "2px 6px" }}>
-                        <strong>SGST</strong>
+                        SGST
                       </td>
                       <td className="right" style={{ padding: "2px 6px" }}>
-                        <strong> {getGSTValue()}</strong>
+                        {getGSTValue()}
                       </td>
-                      <td className="right"></td>
                     </tr>
                     <tr>
                       <td className="left" style={{ padding: "2px 6px" }}>
-                        <strong>Round Off</strong>
+                        Round Off
                       </td>
+                      <td></td>
                       <td className="left" style={{ padding: "2px 6px" }}>
-                        <strong>
-                          {" "}
-                          {Number(getTotal().toFixed(0) - getTotal()).toFixed(
-                            2
-                          )}
-                        </strong>
+                        {" "}
+                        {Number(getTotal().toFixed(0) - getTotal()).toFixed(2)}
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
             </div>
-            <br />
-            <br />
-            <br />
 
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <div style={{ minWidth: "200px" }}>
@@ -262,22 +283,20 @@ export default function Print() {
                     borderBottom: "1px solid gray",
                   }}
                 >
-                  <strong>
-                    {toWords.convert(getTotal().toFixed(0), {
-                      currency: true,
-                    })}
-                  </strong>{" "}
+                  {toWords.convert(getTotal().toFixed(0), {
+                    currency: true,
+                  })}
                 </p>
               </div>
-              <div>
+              <div style={{ minWidth: "150px" }}>
                 <p
                   className="ml-center"
                   style={{
-                    textAlign: "center",
+                    textAlign: "left",
                     borderBottom: "1px solid gray",
                   }}
                 >
-                  <strong>Total Payable:</strong>
+                  Total Payable:
                   <strong> {Number(getTotal().toFixed(0))}</strong>
                 </p>
               </div>
