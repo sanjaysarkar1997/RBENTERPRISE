@@ -135,7 +135,9 @@ export const CreateBill = (props) => {
   ];
 
   function handleChange(value) {
-    let product = products.find((ele) => ele.productCode === value);
+    let product = products.find(
+      (ele) => ele?.productCode + " " + ele?.productName === value
+    );
     if (product) {
       setProduct(product);
     }
@@ -356,7 +358,10 @@ export const CreateBill = (props) => {
                   {products.map((ele, i) => {
                     if (ele.stock) {
                       return (
-                        <Option value={ele?.productCode} key={i}>
+                        <Option
+                          value={ele?.productCode + " " + ele?.productName}
+                          key={`product-${i}`}
+                        >
                           {ele.productCode + " - " + ele.productName}
                         </Option>
                       );
