@@ -32,6 +32,7 @@ import {
 
 import {
   createEntry,
+  deleteEntry,
   entries,
   getEntry,
 } from "../controller/bulkEnry.controller";
@@ -57,6 +58,7 @@ router.post("/delete-bill", deleteBill);
 router.post("/create-entry", createEntry);
 router.get("/get-entries", entries);
 router.get("/get-entry/:id", getEntry);
+router.post("/delete-entry", deleteEntry);
 
 // Non GST
 router.get("/get-non-gst-bills", billsNonGST);

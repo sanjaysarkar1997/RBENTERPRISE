@@ -55,7 +55,7 @@ export const ViewEntries = (props) => {
 
   const deleteBill = (id) => {
     http
-      .post(apis.DELETE_BILL, { id: id })
+      .post(apis.DELETE_ENTRY, { id: id })
       .then((res) => console.log(res))
       .finally(() => getBills());
   };

@@ -27,6 +27,7 @@ const apis = {
   CREATE_ENTRY: "create-entry",
   VIEW_ENTRIES: "get-entries",
   VIEW_ENTRY: "get-entry",
+  DELETE_ENTRY: "delete-entry",
 };
 
 export default apis;
