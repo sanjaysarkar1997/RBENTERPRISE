@@ -264,7 +264,12 @@ export const AddBulkStocks = (props) => {
           <Button key="back" onClick={handleCancel}>
             Return
           </Button>,
-          <Button key="submit" type="primary" onClick={() => addProduct()}>
+          <Button
+            key="submit"
+            disabled={!quantity}
+            type="primary"
+            onClick={() => addProduct()}
+          >
             Add
           </Button>,
         ]}
@@ -291,28 +296,20 @@ export const AddBulkStocks = (props) => {
                   showSearch
                 >
                   {products.map((ele, i) => {
-                    if (ele.stock) {
-                      return (
-                        <Option
-                          value={ele?.productCode + " " + ele?.productName}
-                          key={`product-${i}`}
-                        >
-                          {ele.productCode + " - " + ele.productName}
-                        </Option>
-                      );
-                    } else {
-                      return null;
-                    }
+                    return (
+                      <Option
+                        value={ele?.productCode + " " + ele?.productName}
+                        key={`product-${i}`}
+                      >
+                        {ele.productCode + " - " + ele.productName}
+                      </Option>
+                    );
                   })}
                 </Select>
               </td>
 
               <td>
-                <InputNumber
-                  min={1}
-                  max={product.stock}
-                  onChange={(e) => setQuantity(e)}
-                />
+                <InputNumber min={1} onChange={(e) => setQuantity(e)} />
               </td>
               <td>
                 <h5 style={{ margin: "0 5px" }}>
