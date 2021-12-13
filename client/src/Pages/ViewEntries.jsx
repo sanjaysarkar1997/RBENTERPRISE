@@ -1,27 +1,18 @@
-import { Table, Typography, Button, Modal } from "antd";
+import { Button, Modal, Typography, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import apis from "../apis/urls";
-import { loading } from "../Redux/action/loading";
 import moment from "moment";
-import { httpServicesGet } from "../services/httpServices";
 import { DeleteOutlined } from "@ant-design/icons";
+import apis from "../apis/urls";
+import { httpServicesGet } from "../services/httpServices";
 import http from "../apis/instance";
-import { useHistory } from "react-router";
 
-const ViewBills = (props) => {
+export const ViewEntries = (props) => {
   const [data, setData] = useState([]);
-
-  const history = useHistory();
 
   const columns = [
     {
-      title: "Customer Name",
-      dataIndex: "customerName",
-      key: "name",
-    },
-    {
-      title: "Date",
+      title: "Date Of Entry",
       dataIndex: "dateOfBilling",
       render: (data) => (
         <p style={{ marginBottom: "0px" }}>
@@ -31,34 +22,12 @@ const ViewBills = (props) => {
       key: "date",
     },
     {
-      title: "Address",
-      dataIndex: "Address1",
-      key: "address",
-    },
-
-    {
       title: "View",
       dataIndex: "_id",
       render: (record, test) => (
-        <a href={`/print/${record}`} target="_blank" rel="noreferrer">
+        <a href={`/view-entry/${record}`} target="_blank" rel="noreferrer">
           View
         </a>
-      ),
-      key: "rate",
-    },
-    {
-      title: "Edit",
-      dataIndex: "_id",
-      render: (record, test) => (
-        <Button
-          type="text"
-          onClick={() => {
-            window.location.href = `/update-bill/${record}`;
-          }}
-          
-        >
-          Edit
-        </Button>
       ),
       key: "rate",
     },
@@ -92,7 +61,7 @@ const ViewBills = (props) => {
   };
 
   const getBills = async () => {
-    let data = await httpServicesGet(apis.VIEW_BILLS);
+    let data = await httpServicesGet(apis.VIEW_ENTRIES);
     setData(data);
   };
 
@@ -103,7 +72,7 @@ const ViewBills = (props) => {
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
-        View Bills
+        View Bulk Entries
       </Typography.Title>
       <Table
         columns={columns}
@@ -117,4 +86,6 @@ const ViewBills = (props) => {
 
 const mapStateToProps = (state) => ({});
 
-export default connect(mapStateToProps, loading)(ViewBills);
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ViewEntries);

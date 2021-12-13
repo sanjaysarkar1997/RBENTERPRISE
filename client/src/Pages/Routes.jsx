@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { AddBulkStocks } from "./AddBulkStocks";
 import AddItem from "./AddItem";
 import { AddStocks } from "./AddStocks";
 import CreateBill from "./CreateBill";
@@ -9,6 +10,7 @@ import { CustomerReport } from "./CustomerReport";
 import { SalesReport } from "./SalesReport";
 import ViewBills from "./ViewBills";
 import ViewCustomer from "./ViewCustomer";
+import { ViewEntries } from "./ViewEntries";
 import ViewItems from "./ViewItems";
 import ViewNonGSTBill from "./ViewNonGSTBill";
 import { ViewStocks } from "./ViewStocks";
@@ -29,6 +31,9 @@ export default function Routes() {
         <ViewItems />
       </Route>
       <Route path="/create-bill">
+        <CreateBill />
+      </Route>
+      <Route path="/update-bill/:id">
         <CreateBill />
       </Route>
       <Route path="/create-non-gst-bill">
@@ -57,6 +62,12 @@ export default function Routes() {
       </Route>
       <Route path="/view-customers">
         <ViewCustomer />
+      </Route>
+      <Route path="/add-bulk-stocks">
+        <AddBulkStocks />
+      </Route>
+      <Route path="/view-entries">
+        <ViewEntries />
       </Route>
     </Switch>
   );

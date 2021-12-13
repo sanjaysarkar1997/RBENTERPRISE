@@ -30,6 +30,12 @@ import {
   getBillNonGST,
 } from "../controller/billNonGST.controller";
 
+import {
+  createEntry,
+  entries,
+  getEntry,
+} from "../controller/bulkEnry.controller";
+
 const router = express.Router();
 
 router.get("/get-products", products);
@@ -48,6 +54,10 @@ router.get("/get-customers", customers);
 router.post("/update-customer", updateCustomer);
 router.post("/delete-customer", deleteCustomer);
 router.post("/delete-bill", deleteBill);
+router.post("/create-entry", createEntry);
+router.get("/get-entries", entries);
+router.get("/get-entry/:id", getEntry);
+
 // Non GST
 router.get("/get-non-gst-bills", billsNonGST);
 router.get("/get-non-gst-bill/:id", getBillNonGST);

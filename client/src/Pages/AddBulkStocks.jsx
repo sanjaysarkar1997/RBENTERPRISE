@@ -1,88 +1,38 @@
-import React, { useEffect, useState } from "react";
 import {
   Button,
-  Select,
-  Typography,
-  DatePicker,
-  Table,
-  InputNumber,
   Divider,
+  InputNumber,
   Modal,
+  Typography,
+  Select,
+  Table,
+  DatePicker,
 } from "antd";
-import { connect } from "react-redux";
-import http from "../apis/instance";
-import apis from "../apis/urls";
 import moment from "moment";
-import Swal from "sweetalert2";
-import { useHistory, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import apis from "../apis/urls";
+import { httpServicesGet } from "../services/httpServices";
 import { loading } from "../Redux/action/loading";
 import customId from "../services/customId";
-import { httpServicesGet } from "../services/httpServices";
+import http from "../apis/instance";
+import Swal from "sweetalert2";
+import { useHistory, useParams } from "react-router-dom";
+import store from "../store";
 
-export const CreateBill = (props) => {
+export const AddBulkStocks = (props) => {
   const { Option } = Select;
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [dataSource, setDataSource] = useState([]);
-  const [product, setProduct] = useState({});
-  const [quantity, setQuantity] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [dateOfBilling, setDateOfBilling] = useState(moment());
-  const [customers, setCustomers] = useState([]);
-  const [customer, setCustomer] = useState({});
-  const [deleteDataSource, setDeleteDataSource] = useState([]);
-  const [billDetails, setBillDetails] = useState({});
 
   const history = useHistory();
 
   const { id } = useParams();
 
-  useEffect(() => {
-    if (id) {
-      const getBills = async () => {
-        let data = await httpServicesGet(apis.VIEW_BILL + "/" + id);
-        setCustomer({
-          customerName: data.customerName,
-          Address1: data.Address1,
-          Address2: data.Address2,
-          mobileNumber: data.mobileNumber,
-          _id: data._id,
-        });
-        setDateOfBilling(moment(data.dateOfBilling));
-        console.log(data.products);
-
-        setDataSource(data.products);
-        setBillDetails(data);
-      };
-      getBills();
-    }
-  }, [id]);
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-    setProduct({});
-    setQuantity(0);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setProduct({});
-    setQuantity(0);
-  };
-
-  const getItems = async () => {
-    let data = await httpServicesGet(apis.GET_ITEMS);
-    setProducts(data);
-  };
-
-  useEffect(() => {
-    getCustomer();
-    getItems();
-  }, []);
-
-  const getCustomer = async () => {
-    let data = await httpServicesGet(apis.GET_CUSTOMERS);
-    setCustomers(data);
-  };
+  const [dataSource, setDataSource] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [product, setProduct] = useState({});
+  const [quantity, setQuantity] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [dateOfEntry, setDateOfEntry] = useState(moment());
 
   const columns = [
     {
@@ -138,28 +88,32 @@ export const CreateBill = (props) => {
     },
   ];
 
-  function handleChange(value) {
-    let product = products.find(
-      (ele) => ele?.productCode + " " + ele?.productName === value
-    );
-    if (product) {
-      setProduct(product);
-    }
-  }
-
-  const newDiscount = (e) => {
-    let netPrice = Number(
-      (product.salePrice - (product.salePrice / 100) * e).toFixed(2)
-    );
-    let discount = e;
-    setProduct({ ...product, netPrice, discount });
+  const getItems = async () => {
+    let data = await httpServicesGet(apis.GET_ITEMS);
+    setProducts(data);
   };
 
-  function handleCustomer(value) {
-    let customer = customers.find((ele) => ele.customerName === value);
-    console.log(customer);
-    setCustomer(customer);
-  }
+  useEffect(() => {
+    getItems();
+  }, []);
+
+  const deleteItem = (id) => {
+    let data = dataSource;
+    const filteredData = data.filter((ele) => ele.productId !== id);
+    setDataSource(filteredData);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+    setProduct({});
+    setQuantity(0);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setProduct({});
+    setQuantity(0);
+  };
 
   const addProduct = () => {
     let data = dataSource;
@@ -182,9 +136,8 @@ export const CreateBill = (props) => {
       companyName: product.companyName,
       distributorCommission: product.distributorCommission,
     };
-    if (id) {
-      obj.addedOrNot = true;
-    }
+
+    console.log(obj);
 
     data.push(obj);
     setDataSource(data);
@@ -193,85 +146,42 @@ export const CreateBill = (props) => {
     setQuantity(0);
   };
 
-  const deleteItem = (id) => {
-    let data = dataSource;
-
-    const filteredData = data.filter((ele) => {
-      return ele.productId !== id;
-    });
-    setDataSource(filteredData);
-    let deleteObj = data.find((ele) => ele.productId === id);
-    let deleteData = deleteDataSource;
-    deleteData.push(deleteObj);
-    setDeleteDataSource(deleteData);
-  };
-
-  const getTotal = () => {
-    let total = 0;
-    for (let i = 0; i < dataSource.length; i++) {
-      total = total + dataSource[i].total;
+  function handleChange(value) {
+    let product = products.find(
+      (ele) => ele?.productCode + " " + ele?.productName === value
+    );
+    if (product) {
+      setProduct(product);
     }
-    return Number(total).toFixed(2);
-  };
+  }
 
-  const createBill = () => {
-    props.loading(true);
+  const createEntry = () => {
+    store.dispatch(loading(true));
 
     if (id) {
-      delete billDetails.products;
-      let data = billDetails;
-      data.products = dataSource;
-      data.deletedData = deleteDataSource;
-      console.log(data);
-      console.log(deleteDataSource, dataSource);
-      if (Object.keys(data).length > 0) {
-        http
-          .post(apis.UPDATE_BILL, data)
-          .then((res) => {
-            if (res.data.error) {
-              console.log(res);
-            } else {
-              Swal.fire("Success", "Bill Updated Successfully", "success").then(
-                (value) => {
-                  if (value) {
-                    history.push("/view-bills");
-                  }
-                }
-              );
-            }
-          })
-          .finally(() => props.loading(false));
-        console.log(data);
-      } else {
-        console.log("Error");
-      }
-
-      props.loading(false);
     } else {
-      let data = customer;
-      data.dateOfBilling = dateOfBilling;
-      data.billNo = customId(6);
+      let data = {};
+      data.dateOfBilling = dateOfEntry;
+      data.entryNo = customId(6);
       data.products = dataSource;
       delete data.__v;
       delete data._id;
 
       if (Object.keys(data).length > 0) {
         http
-          .post(apis.CREATE_BILL, data)
+          .post(apis.CREATE_ENTRY, data)
           .then((res) => {
             if (res.data.error) {
               console.log(res);
             } else {
-              Swal.fire("Success", "Bill Created Successfully", "success").then(
-                (value) => {
-                  if (value) {
-                    history.push("/view-bills");
-                  }
-                }
-              );
+              Swal.fire(
+                "Success",
+                "Entry Created Successfully",
+                "success"
+              ).then(() => history.push("/view-entries"));
             }
           })
-          .finally(() => props.loading(false));
+          .finally(() => store.dispatch(loading(false)));
         console.log(data);
       } else {
         console.log("Error");
@@ -282,34 +192,16 @@ export const CreateBill = (props) => {
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
-        {id ? "Update" : "Create"} Bill
+        Add Bulk Stocks
       </Typography.Title>
-      <div style={{ display: "flex" }}>
-        <Select
-          placeholder="Select Customer"
-          style={{ width: "100%" }}
-          onChange={handleCustomer}
-          defaultValue={customer.customerName}
-          showSearch
-          key={customer.customerName}
-          disabled={id !== undefined}
-        >
-          {customers.map((ele, i) => (
-            <Option value={ele?.customerName} key={i}>
-              {ele.customerName + " - " + ele.Address1}
-            </Option>
-          ))}
-        </Select>
-        &emsp;
-        <DatePicker
-          key={customer.dateOfBilling}
-          format={"DD/MM/YYYY"}
-          onChange={(e) => setDateOfBilling(e)}
-          value={dateOfBilling}
-          disabled={id !== undefined}
-        />
-      </div>
-      <br />
+
+      <DatePicker
+        style={{ width: "100%" }}
+        format={"DD/MM/YYYY"}
+        onChange={(e) => setDateOfEntry(e)}
+        value={dateOfEntry}
+        // disabled={id !== undefined}
+      />
       <Divider style={{ margin: "10px 0px" }}></Divider>
       <Typography.Title style={{ textAlign: "center" }} level={4}>
         Products
@@ -327,9 +219,7 @@ export const CreateBill = (props) => {
             <Typography.Title
               level={5}
               style={{ textAlign: "right", marginRight: "50px" }}
-            >
-              Grand Total: {getTotal()}
-            </Typography.Title>
+            ></Typography.Title>
           )}
           size="small"
           rowKey="productId"
@@ -355,12 +245,12 @@ export const CreateBill = (props) => {
             icon: "",
             okText: "Yes",
             cancelText: "Cancel",
-            onOk: () => createBill(),
+            onOk: () => createEntry(),
           })
         }
-        disabled={Object.keys(customer).length === 0 || dataSource.length === 0}
+        disabled={dataSource.length === 0}
       >
-        {id ? "Update" : "Create"}
+        Create
       </Button>
 
       <Modal
@@ -374,12 +264,7 @@ export const CreateBill = (props) => {
           <Button key="back" onClick={handleCancel}>
             Return
           </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            disabled={!quantity}
-            onClick={() => addProduct()}
-          >
+          <Button key="submit" type="primary" onClick={() => addProduct()}>
             Add
           </Button>,
         ]}
@@ -387,11 +272,10 @@ export const CreateBill = (props) => {
         <table className="table">
           <thead>
             <tr>
-              <td>Select Product</td>
+              <td style={{ width: "300px" }}>Select Product</td>
               <td>Quantity</td>
               <td>MRP</td>
               <td>Rate</td>
-              <td>Discount</td>
               <td>Amount</td>
               <td>Net Amount</td>
             </tr>
@@ -402,7 +286,7 @@ export const CreateBill = (props) => {
                 {" "}
                 <Select
                   placeholder="Search Product"
-                  style={{ width: 200 }}
+                  style={{ width: "100%" }}
                   onChange={handleChange}
                   showSearch
                 >
@@ -442,16 +326,7 @@ export const CreateBill = (props) => {
                     : 0}
                 </h6>
               </td>
-              <td>
-                <h6 style={{ margin: "0 5px" }}>
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    value={product.discount}
-                    onChange={(e) => newDiscount(e)}
-                  />
-                </h6>
-              </td>
+
               <td>
                 <h6 style={{ margin: "0 5px" }}>
                   {product?.netPrice ? Number(product.netPrice.toFixed(2)) : 0}
@@ -481,4 +356,4 @@ const mapStateToProps = (state) => ({});
 
 const mapDispatchToProps = { loading };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateBill);
+export default connect(mapStateToProps, mapDispatchToProps)(AddBulkStocks);

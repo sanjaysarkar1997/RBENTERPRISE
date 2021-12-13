@@ -3,12 +3,11 @@ import thunk from "redux-thunk";
 import logger from "redux-logger";
 import Root from "./Redux/reducers/Root";
 
-
 // Initial State for Store
 const initialState = {};
 
 // MiddleWare for Store
-const middleWare = [thunk, logger];
+const middleWare = [thunk];
 
 // Store
 const store = createStore(Root, initialState, applyMiddleware(...middleWare));

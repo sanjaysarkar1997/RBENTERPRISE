@@ -2,8 +2,8 @@
 // https://rbenterprise.herokuapp.com
 
 const apis = {
-  baseUrl: "https://rbenterprise.herokuapp.com/api/v1/",
-  // baseUrl: "http://localhost:5000/api/v1/",
+  // baseUrl: "https://rbenterprise.herokuapp.com/api/v1/",
+  baseUrl: "http://localhost:5000/api/v1/",
   ADD_ITEM: "create-product",
   GET_ITEMS: "get-products",
   CREATE_BILL: "create-bill",
@@ -24,6 +24,9 @@ const apis = {
   GET_CUSTOMER: "get-customer",
   DELETE_CUSTOMER: "delete-customer",
   DELETE_BILL: "delete-bill",
+  CREATE_ENTRY: "create-entry",
+  VIEW_ENTRIES: "get-entries",
+  VIEW_ENTRY: "get-entry",
 };
 
 export default apis;

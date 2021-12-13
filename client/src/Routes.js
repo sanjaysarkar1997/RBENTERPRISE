@@ -9,6 +9,7 @@ import Home from "./Pages/Home";
 import Login from "./Pages/Login/Login";
 import Print from "./Pages/Print";
 import PrintNonGST from "./Pages/PrintNonGST";
+import ViewEntry from "./Pages/ViewEntry";
 
 const SignUp = lazy(() => import("./Pages/SignUp/SignUp"));
 const Restricted = lazy(() => import("./Pages/Login/Login"));
@@ -32,6 +33,7 @@ export default function Routes() {
         />
         <PublicRoute component={Print} path="/print/:id" />
         <PublicRoute component={PrintNonGST} path="/print-non-gst/:id" />
+        <PublicRoute component={ViewEntry} path="/view-entry/:id" />
         <PrivateRoute component={LazyLoader(Restricted)} path="/private" />
         <Authguard>
           <Home />
