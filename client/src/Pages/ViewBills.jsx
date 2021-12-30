@@ -120,7 +120,7 @@ const ViewBills = (props) => {
   const getBills = async () => {
     let data = await httpServicesGet(apis.VIEW_BILLS);
     setData(data);
-    setFilterData(data.reverse());
+    setFilterData(data);
   };
 
   useEffect(() => {
@@ -131,7 +131,7 @@ const ViewBills = (props) => {
     const filteredData = data.filter((ele) =>
       ele.customerName.includes(e.target.value.toUpperCase())
     );
-    setFilterData(filteredData.reverse());
+    setFilterData(filteredData);
   };
 
   const rangePicker = (e) => {
@@ -176,6 +176,7 @@ const ViewBills = (props) => {
     return Number(amount);
   };
 
+
   return (
     <>
       <Typography.Title style={{ textAlign: "center" }} level={3}>
@@ -197,7 +198,7 @@ const ViewBills = (props) => {
       <Divider></Divider>
       <Table
         columns={columns}
-        dataSource={filterData}
+        dataSource={filterData.reverse()}
         size="small"
         rowKey="_id"
         footer={() => (
