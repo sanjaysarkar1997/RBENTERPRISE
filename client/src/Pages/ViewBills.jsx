@@ -209,7 +209,7 @@ const ViewBills = (props) => {
               position: "relative",
             }}
           >
-            <div className="div-center" style={{ padding: "10px" }}>
+            <div className="div-center" style={{ padding: "5px 10px" }}>
               <p style={{ margin: "0" }}>
                 Total:{" "}
                 <b>
@@ -219,7 +219,7 @@ const ViewBills = (props) => {
                 </b>
               </p>
             </div>
-            <div style={{ padding: "10px 20px" }}>
+            <div style={{ padding: "5px 20px" }}>
               <p style={{ margin: "0" }}>
                 Total: <b>{getTotalAmount(filterData)}</b>
               </p>
