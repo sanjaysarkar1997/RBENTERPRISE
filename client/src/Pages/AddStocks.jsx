@@ -28,7 +28,9 @@ export const AddStocks = (props) => {
   }, []);
 
   function handleChange(value) {
-    let product = products.find((ele) => ele.productCode === value);
+    let product = products.find(
+      (ele) => ele?.productCode + " " + ele?.productName === value
+    );
     setProduct(product);
   }
 
@@ -60,13 +62,13 @@ export const AddStocks = (props) => {
 
       <br />
       <Select
-        placeholder="Select Product"
+        placeholder="Select a Product"
         style={{ width: "100%" }}
         onChange={handleChange}
         showSearch
       >
         {products.map((ele, i) => (
-          <Option value={ele?.productCode} key={i}>
+          <Option value={ele?.productCode + " " + ele?.productName} key={i}>
             {ele.productCode + " - " + ele.productName}
           </Option>
         ))}

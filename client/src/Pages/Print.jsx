@@ -241,7 +241,7 @@ export default function Print() {
                         {getTotalAmount()}
                       </td>
                       <td className="left" style={{ minWidth: "70px" }}>
-                        {getTotal()}
+                        {getTotal().toFixed(2)}
                       </td>
                     </tr>
                     <tr>
