@@ -3,6 +3,7 @@ let company = [
   { name: "Asian Paints", color: "#2196F3" },
   { name: "Little Angel", color: "#4caf50" },
   { name: "Bajaj", color: "#801783" },
+  { name: "Paree", color: "#42a7ff" },
 ];
 
 const colorGenerator = (value) => {
