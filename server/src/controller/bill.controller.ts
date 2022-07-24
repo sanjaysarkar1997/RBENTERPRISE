@@ -1,4 +1,5 @@
 const Mongoose = require("mongoose");
+import moment from "moment";
 import Bill from "../model/bill.model";
 import Product from "../model/product.model";
 import { error, success } from "../services/responseModifier";
@@ -10,6 +11,35 @@ const bills = async (req: any, res: any, next: any) => {
       res.json(error("Fetch Failed", 300));
     } else {
       res.json(success("Fetched Successful", bill, 200));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// get bills by pagination
+const getBillsByPagination = async (req: any, res: any, next: any) => {
+  try {
+    let { page, limit } = req.query;
+    let { customerName } = req.query;
+    let query: any = {};
+    if (customerName) {
+      query["customerName"] = { $regex: customerName, $options: "i" };
+    }
+
+    console.log(query);
+
+    const docLength = await Bill.countDocuments(query);
+    let bill = await Bill.find(query)
+      .sort({ dateOfBilling: -1 })
+      .skip((parseInt(page) - 1) * parseInt(limit))
+      .limit(parseInt(limit));
+
+    console.log(bill);
+    if (!bill) {
+      res.json(error("Fetch Failed", 300));
+    } else {
+      res.json(success("Fetched Successful", { bill, docLength }, 200));
     }
   } catch (error) {
     console.log(error);
@@ -119,14 +149,11 @@ const updateBill = async (req: any, res: any, next: any) => {
   }
 };
 
-export { bills, createBill, updateBill, getBill, deleteBill };
-
-// {
-//   "productName": "This is product 3",
-//   "productCode": "L 34",
-//   "SKU": "TGY7O0GYB8",
-//   "GST": "12",
-//   "MRP": "700",
-//   "salePrice": "600",
-//   "stock": "700"
-// }
+export {
+  bills,
+  createBill,
+  updateBill,
+  getBill,
+  deleteBill,
+  getBillsByPagination,
+};

@@ -15,6 +15,7 @@ import {
   deleteBill,
   getBill,
   updateBill,
+  getBillsByPagination,
 } from "../controller/bill.controller";
 import {
   createCustomer,
@@ -28,6 +29,7 @@ import {
   createBillNonGST,
   deleteBillNonGST,
   getBillNonGST,
+  getBillsNonGSTByPagination,
 } from "../controller/billNonGST.controller";
 
 import {
@@ -43,6 +45,7 @@ router.get("/get-products", products);
 router.get("/get-product/:id", getProduct);
 router.get("/get-customer/:id", getCustomer);
 router.get("/get-bills", bills);
+router.get("/get-bills-pagination", getBillsByPagination);
 router.get("/get-bill/:id", getBill);
 router.post("/create-bill", createBill);
 router.post("/update-bill", updateBill);
@@ -62,6 +65,7 @@ router.post("/delete-entry", deleteEntry);
 
 // Non GST
 router.get("/get-non-gst-bills", billsNonGST);
+router.get("/get-non-gst-bills-pagination", getBillsNonGSTByPagination);
 router.get("/get-non-gst-bill/:id", getBillNonGST);
 router.post("/create-non-gst-bill", createBillNonGST);
 router.post("/delete-non-gst-bill", deleteBillNonGST);

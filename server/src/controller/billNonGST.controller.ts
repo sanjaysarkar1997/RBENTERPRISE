@@ -16,6 +16,24 @@ const billsNonGST = async (req: any, res: any, next: any) => {
   }
 };
 
+const getBillsNonGSTByPagination = async (req: any, res: any, next: any) => {
+  try {
+    let { page, limit } = req.query;
+    const docLength = await BillNonGST.countDocuments();
+    let bill = await BillNonGST.find()
+      .sort({ createdAt: -1 })
+      .skip(parseInt(page) * parseInt(limit))
+      .limit(parseInt(limit));
+    if (!bill) {
+      res.json(error("Fetch Failed", 300));
+    } else {
+      res.json(success("Fetched Successful", { bill, docLength }, 200));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getBillNonGST = async (req: any, res: any, next: any) => {
   try {
     let id = req?.params?.id;
@@ -42,13 +60,13 @@ const createBillNonGST = async (req: any, res: any, next: any) => {
         let bulkArr = [];
 
         for (const i of input) {
-          if(!i.isVoucher)
-          bulkArr.push({
-            updateOne: {
-              filter: { _id: Mongoose.Types.ObjectId(i.productId) },
-              update: { $inc: { stock: -i.quantity } },
-            },
-          });
+          if (!i.isVoucher)
+            bulkArr.push({
+              updateOne: {
+                filter: { _id: Mongoose.Types.ObjectId(i.productId) },
+                update: { $inc: { stock: -i.quantity } },
+              },
+            });
         }
 
         await Product.bulkWrite(bulkArr);
@@ -75,14 +93,11 @@ const deleteBillNonGST = async (req: any, res: any, next: any) => {
 
 const updateBillNonGST = async (req: any, res: any, next: any) => {};
 
-export { billsNonGST, createBillNonGST, updateBillNonGST, getBillNonGST, deleteBillNonGST };
-
-// {
-//   "productName": "This is product 3",
-//   "productCode": "L 34",
-//   "SKU": "TGY7O0GYB8",
-//   "GST": "12",
-//   "MRP": "700",
-//   "salePrice": "600",
-//   "stock": "700"
-// }
+export {
+  billsNonGST,
+  createBillNonGST,
+  updateBillNonGST,
+  getBillNonGST,
+  deleteBillNonGST,
+  getBillsNonGSTByPagination,
+};

@@ -2,16 +2,18 @@
 // https://rbenterprise.herokuapp.com
 
 const apis = {
-  baseUrl: "https://rbenterprise.herokuapp.com/api/v1/",
-  // baseUrl: "http://localhost:5000/api/v1/",
+  // baseUrl: "https://rbenterprise.herokuapp.com/api/v1/",
+  baseUrl: "http://localhost:5000/api/v1/",
   ADD_ITEM: "create-product",
   GET_ITEMS: "get-products",
   CREATE_BILL: "create-bill",
   UPDATE_BILL: "update-bill",
   VIEW_BILLS: "get-bills",
+  VIEW_BILLS_PAGINATION: "get-bills-pagination",
   VIEW_BILL: "get-bill",
   CREATE_NON_GST_BILL: "create-non-gst-bill",
   VIEW_NON_GST_BILLS: "get-non-gst-bills",
+  VIEW_NON_GST_BILLS_PAGINATION: "get-non-gst-bills-pagination",
   VIEW_NON_GST_BILL: "get-non-gst-bill",
   DELETE_NON_GST_BILL: "delete-non-gst-bill",
   UPDATE_STOCK: "update-stock",

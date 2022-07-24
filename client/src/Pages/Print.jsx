@@ -122,7 +122,7 @@ export default function Print() {
                 <div>
                   <strong>R B ENTERPRISE</strong>
                 </div>
-                <div>Ashutosh Pally</div>
+                <div>Subhash Pally</div>
                 <div>FALAKATA, Alipurduar</div>
                 <div>Phone: 8101397644</div>
                 <div>
