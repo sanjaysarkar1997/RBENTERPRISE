@@ -1,6 +1,8 @@
 // http://localhost:5000
 // https://rbenterprise.herokuapp.com
 
+
+// changes the api url
 const apis = {
   baseUrl: "https://rbenterprise.onrender.com/api/v1/",
   // baseUrl: "http://localhost:5000/api/v1/",
