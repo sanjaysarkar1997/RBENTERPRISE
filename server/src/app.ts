@@ -28,8 +28,6 @@ app.use(bodyParser.json());
 // CronRunner
 // cronRunner();
 
-console.log("HI");
-
 // Routes
 app.use("/api/v1", routes);
 
