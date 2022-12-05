@@ -4,7 +4,7 @@
 
 // changes the api url
 const apis = {
-  baseUrl: "https://rbenterprise.onrender.com/api/v1/",
+  baseUrl: "https://healthy-erin-kitten.cyclic.app/api/v1/",
   // baseUrl: "http://localhost:5000/api/v1/",
   ADD_ITEM: "create-product",
   GET_ITEMS: "get-products",
